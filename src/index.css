@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,300..700;1,300..700&family=Sacramento&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+@import 'tailwindcss';
+
+@layer base {
+  :root {
+    --bg-primary: #080808;
+    --bg-elevated: #0e0e11;
+    --border-zinc: #27272a;
+    --accent-cyan: #00f0ff;
+    --accent-blue: #00b8ff;
+    --accent-amber: #fbbf24;
+    --accent-coral: #f87171;
+    --accent-emerald: #10b981;
+  }
+
+  html {
+    background-color: #080808;
+    color: #ffffff;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    scroll-behavior: auto;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+}
+
+.font-display {
+  font-family: 'Archivo Black', 'Syne', sans-serif;
+  letter-spacing: -0.035em;
+}
+
+.font-syne {
+  font-family: 'Syne', sans-serif;
+}
+
+.font-sans-tight {
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.font-serif-editorial {
+  font-family: 'Instrument Serif', Georgia, serif;
+}
+
+.font-mono-tech {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.font-signature {
+  font-family: 'Sacramento', cursive;
+}
+
+/* Subtle Volumetric Spotlights for Hero (Reference Image 2) */
+.hero-spotlight-left {
+  background: radial-gradient(
+    ellipse 55% 85% at 15% 0%,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 45%,
+    transparent 80%
+  );
+}
+
+.hero-spotlight-right {
+  background: radial-gradient(
+    ellipse 55% 85% at 85% 0%,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 45%,
+    transparent 80%
+  );
+}
+
+/* Glassmorphism & Glowing Border Utilities */
+.glass-pill {
+  background: rgba(20, 20, 23, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(63, 63, 70, 0.45);
+}
+
+.glass-card {
+  background: linear-gradient(
+    165deg,
+    rgba(22, 22, 26, 0.85) 0%,
+    rgba(11, 11, 13, 0.95) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(39, 39, 42, 0.85);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 28px -4px rgba(0, 240, 255, 0.35),
+    inset 0 0 12px rgba(0, 240, 255, 0.15);
+}
+
+.glow-amber {
+  box-shadow: 0 0 28px -4px rgba(251, 191, 36, 0.35),
+    inset 0 0 12px rgba(251, 191, 36, 0.15);
+}
+
+/* Subtle Noise Texture */
+.bg-noise {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080808;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00f0ff;
+}
+
+@media (pointer: fine) {
+  body.custom-cursor-active,
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active [role='button'] {
+    cursor: none !important;
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Showcases a developer's skills and projects through an interactive, dark-themed portfolio with dynamic animations and smooth scrolling for engaging user experience.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
