@@ -67,22 +67,22 @@ export const HERO_DATA = {
 
 export const STATS_LINES = [
   {
-    text: 'Figma precision. React engineering.',
+    text: 'Design with intent. Engineer with precision.',
     blockColor: '#5865F2', // Electric Indigo
     cursorColor: '#5865F2',
   },
   {
-    text: 'Three-tier tokens that scale.',
+    text: 'Scalable tokens. Fluid interactions.',
     blockColor: '#10B981', // Emerald Green
     cursorColor: '#10B981',
   },
   {
-    text: 'Tactile physics from weights to pixels',
+    text: 'From atomic values to tangible experiences —',
     blockColor: '#F59E0B', // Amber Orange
     cursorColor: '#F59E0B',
   },
   {
-    text: '— the numbers behind the craft.',
+    text: 'every pixel has a purpose.',
     blockColor: '#EF4444', // Coral Red
     cursorColor: '#EF4444',
   },

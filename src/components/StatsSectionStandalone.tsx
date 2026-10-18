@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import { animate, motion, useInView } from 'framer-motion';
 
 const STATS_LINES = [
-  { text: 'Data that speaks. AI that reasons.', blockColor: '#5865F2' },
-  { text: 'Software that ships.', blockColor: '#10B981' },
-  { text: 'Three disciplines, one engineer', blockColor: '#F59E0B' },
-  { text: '— the numbers behind the work.', blockColor: '#EF4444' },
+  { text: 'Design with intent. Engineer with precision.', blockColor: '#5865F2' },
+  { text: 'Scalable tokens. Fluid interactions.', blockColor: '#10B981' },
+  { text: 'From atomic values to tangible experiences —', blockColor: '#F59E0B' },
+  { text: 'every pixel has a purpose.', blockColor: '#EF4444' },
 ];
 
 const KEY_METRICS = [
