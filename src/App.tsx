@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useLenis } from './hooks/useLenis';
 import CustomCursor from './components/CustomCursor';
-import Preloader from './components/Preloader';
+import Preloader, { shouldSkipPreloader } from './components/Preloader';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import PhilosophySection from './components/PhilosophySection';
@@ -14,7 +14,9 @@ import ExperienceSection from './components/ExperienceSection';
 import GallerySection, { Footer } from './components/GallerySection';
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  // Lazy initializer: decided before first paint, so refreshes / reduced-motion
+  // users never see even a frame of the black intro screen.
+  const [loading, setLoading] = useState(() => !shouldSkipPreloader());
   const { scrollTo } = useLenis(!loading);
   const done = useCallback(() => setLoading(false), []);
 

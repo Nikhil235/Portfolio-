@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowUpRight } from 'lucide-react';
 import { MaskedLines, ParallaxFade } from './ScrollText';
 import { HERO_DATA } from '../data/portfolioData';
 
@@ -63,9 +64,29 @@ export default function PhilosophySection() {
               body: (
                 <>
                   <p className="text-sm leading-relaxed text-zinc-400">
-                    On the side I build quantitative trading models. It keeps my engineering disciplined: fast,
-                    predictable, and easy to reason about—from token logic to the pixel.
+                    On the side I build{' '}
+                    <a
+                      id="quant-models-link"
+                      href={HERO_DATA.quantProject.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-cursor="hover"
+                      className="text-zinc-200 underline decoration-[#00F0FF]/50 decoration-1 underline-offset-4 transition-colors hover:text-[#00F0FF] hover:decoration-[#00F0FF]"
+                    >
+                      {HERO_DATA.quantProject.label}
+                    </a>
+                    . It keeps my engineering disciplined: fast, predictable, and easy to reason about—from token logic
+                    to the pixel.
                   </p>
+                  <a
+                    href={HERO_DATA.quantProject.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group mt-4 inline-flex items-center gap-1 font-mono-tech text-[11px] text-[#00F0FF] hover:text-white"
+                  >
+                    View quant models
+                    <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </a>
                   <p className="font-signature mt-4 text-4xl text-white">{HERO_DATA.shortSignature}</p>
                 </>
               ),

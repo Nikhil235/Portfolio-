@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTrans
 import { ArrowUpRight, Award } from 'lucide-react';
 import { EXPERIENCE_ITEMS, FEATURED_BLOGS } from '../data/portfolioData';
 import { MaskedLines, CounterParallaxWatermark } from './ScrollText';
+import SafeImage from './SafeImage';
 
 function ExperienceList() {
   const [hovered, setHovered] = useState<number | null>(null);
@@ -34,7 +35,7 @@ function ExperienceList() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
           >
-            <img src={item.previewImage} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+            <SafeImage src={item.previewImage} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
             <div className="flex items-center gap-2 p-3 font-mono-tech text-[10px] tracking-[0.2em] text-[#00F0FF]">
               <Award className="h-3.5 w-3.5" />
               {item.certificateBadge}
@@ -77,7 +78,8 @@ function BlogRail() {
 
   return (
     <div ref={ref} className="relative h-[300vh]">
-      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
+      {/* pt keeps the pinned "Field Notes" heading clear of the fixed navbar */}
+      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden pt-20 md:pt-24">
         {/* Multi-Plane Counter-Parallax Ghost Watermark */}
         <CounterParallaxWatermark
           text="FIGMA TO PRODUCTION // 3-TIER TOKENS"
@@ -100,8 +102,9 @@ function BlogRail() {
               className="glass-card group w-[82vw] shrink-0 overflow-hidden rounded-3xl md:w-[520px]"
             >
               <div className="relative aspect-[16/9] overflow-hidden">
-                <img
+                <SafeImage
                   src={b.image}
+                  accent={b.accentColor}
                   alt=""
                   loading="lazy"
                   className="h-full w-full object-cover opacity-70 transition-transform duration-700 group-hover:scale-105"

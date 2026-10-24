@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'framer-motion';
 import { Mail, Volume2, VolumeX } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './Icons';
 import { HERO_DATA } from '../data/portfolioData';
@@ -36,14 +37,45 @@ function Clock() {
 export default function Navbar({ onNav }: { onNav: (href: string) => void }) {
   const [active, setActive] = useState('#home');
   const [soundOn, setSoundOn] = useState(true);
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [focusWithin, setFocusWithin] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const { scrollY } = useScroll();
   const s = HERO_DATA.socials;
 
   useEffect(() => {
     setSoundOn(isSoundEnabled());
   }, []);
 
+  // Auto-hide on scroll down, reveal on scroll up. A small delta threshold
+  // avoids flicker from Lenis' sub-pixel easing at the end of a scroll.
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    const delta = y - prev;
+    setScrolled(y > 24);
+    if (y < 120) setHidden(false);
+    else if (delta > 6) setHidden(true);
+    else if (delta < -6) setHidden(false);
+  });
+
+  const isHidden = hidden && !focusWithin;
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 py-5 md:px-10">
+    <motion.header
+      initial={false}
+      animate={{ y: isHidden ? '-110%' : '0%' }}
+      transition={reduceMotion ? { duration: 0 } : { duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      onFocusCapture={() => setFocusWithin(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocusWithin(false);
+      }}
+      className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 transition-[background-color,border-color,padding,backdrop-filter] duration-300 md:px-10 ${
+        scrolled
+          ? 'border-b border-white/5 bg-neutral-950/70 py-3 backdrop-blur-md'
+          : 'border-b border-transparent bg-transparent py-5'
+      }`}
+    >
       <Clock />
       <nav className="glass-pill hidden items-center gap-1 rounded-full p-1 md:flex">
         {LINKS.map((l) => (
@@ -92,7 +124,7 @@ export default function Navbar({ onNav }: { onNav: (href: string) => void }) {
           </a>
         ))}
       </div>
-    </header>
+    </motion.header>
   );
 }
 

@@ -5,6 +5,7 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowUpRight, Mail } from 'lucide-react';
 import { GALLERY_ITEMS, HERO_DATA } from '../data/portfolioData';
 import { MaskedLines, ParallaxFade } from './ScrollText';
+import SafeImage from './SafeImage';
 
 function MagneticButton({ children, href }: { children: React.ReactNode; href: string }) {
   const ref = useRef<HTMLAnchorElement>(null);
@@ -60,9 +61,10 @@ export default function GallerySection() {
               whileHover={{ y: -8 }}
               className={`group relative min-h-[320px] overflow-hidden rounded-3xl border border-[#27272a] ${g.span}`}
             >
-              <img
+              <SafeImage
                 src={g.image}
                 alt={g.title}
+                accent={g.accent}
                 loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover opacity-60 transition-all duration-700 group-hover:scale-105 group-hover:opacity-80"
               />

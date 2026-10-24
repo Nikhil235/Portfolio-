@@ -32,12 +32,15 @@ export function useLenis(enabled: boolean = true) {
     };
   }, [enabled]);
 
+  // Offset ≈ navbar height + breathing room, so headings never land under the fixed header.
+  const NAV_OFFSET = -88;
+
   const scrollTo = (target: string | number | HTMLElement) => {
     if (lenisRef.current) {
-      lenisRef.current.scrollTo(target, { offset: -32, duration: 1.3 });
+      lenisRef.current.scrollTo(target, { offset: NAV_OFFSET, duration: 1.3 });
     } else if (typeof target === 'string') {
-      const el = document.querySelector(target);
-      el?.scrollIntoView({ behavior: 'smooth' });
+      const el = document.querySelector<HTMLElement>(target);
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + NAV_OFFSET, behavior: 'smooth' });
     }
   };
 

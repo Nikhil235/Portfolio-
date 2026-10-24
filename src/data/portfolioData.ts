@@ -1,3 +1,14 @@
+// Bundled via Vite static import → hashed URL in /assets, can never 404 like a remote/public path.
+import tokenSearchbarImage from '../assets/token-searchbar-system.jpg';
+
+/**
+ * Single source of truth for career dates. The "Years Crafting" stat and the
+ * experience timeline both derive from this, so they can never disagree with
+ * each other (keep it in sync with your résumé / LinkedIn start date).
+ */
+export const CAREER_START_YEAR = 2020;
+const YEARS_CRAFTING = Math.max(1, new Date().getFullYear() - CAREER_START_YEAR);
+
 export interface ExperienceItem {
   id: string;
   index: string;
@@ -63,6 +74,12 @@ export const HERO_DATA = {
     instagram: 'https://instagram.com',
     email: 'nikhilarjun.design@gmail.com',
   },
+  // Linked from the Philosophy section's quant-trading line.
+  // TODO: point `url` at the live trading dashboard / model case study once it's public.
+  quantProject: {
+    label: 'quantitative trading models',
+    url: 'https://github.com/nikhilarjun?tab=repositories&q=quant',
+  },
 };
 
 export const STATS_LINES = [
@@ -117,7 +134,7 @@ export const KEY_METRICS = [
     id: 'experience',
     label: 'YEARS CRAFTING',
     startValue: 1,
-    endValue: 4,
+    endValue: YEARS_CRAFTING,
     decimals: 0,
     suffix: '+ Years',
   },
@@ -191,7 +208,7 @@ export const EXPERIENCE_ITEMS: ExperienceItem[] = [
     role: 'Traditional Art & Digital Interface Creator',
     organization: 'Independent Creative Technologist',
     category: 'Creative Tech',
-    period: '2020 — 2022',
+    period: `${CAREER_START_YEAR} — 2022`,
     location: 'Bangalore, India',
     impact: 'Synthesized analog ink portraiture and watercolor principles into digital product design. Shipped 15+ custom web experiences and automated design book principles into Claude skills.',
     description:
@@ -263,8 +280,7 @@ export function calculateCompliance(checklist: Criterion[]) {
     title: 'My-Design-System & Lucifer: Three-Tier Token Architecture & Variant Matrix',
     excerpt:
       'Comprehensive Figma & React design system featuring a 16-variant SearchBar, 36-variant Danger button set, and food delivery app composition.',
-    image:
-      'https://images.unsplash.com/photo-1581291518655-9523c932edcf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    image: tokenSearchbarImage,
     accentColor: '#10B981',
     metrics: '52+ Coded Variants // 3 Tiers',
     content: [
@@ -336,8 +352,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     date: '2024',
     category: 'Design System',
     credentialId: 'DS-TOKENS-2024',
-    image:
-      'https://images.unsplash.com/photo-1581291518655-9523c932edcf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    image: tokenSearchbarImage,
     span: 'md:col-span-4',
     accent: '#10B981',
   },
