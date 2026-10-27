@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
-import { Zap, Bot, ArrowDown, MapPin } from 'lucide-react';
+import { Zap, Bot, ArrowDown, MapPin, Sliders, Gamepad2 } from 'lucide-react';
 import { HERO_DATA } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './Icons';
 import { playTactileClick } from '../hooks/useSound';
@@ -132,7 +132,15 @@ function InteractiveBot() {
   );
 }
 
-export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
+export default function HeroSection({
+  onNav,
+  onOpenMotionLab,
+  onToggleGameMode,
+}: {
+  onNav: (h: string) => void;
+  onOpenMotionLab?: () => void;
+  onToggleGameMode?: () => void;
+}) {
   const s = HERO_DATA.socials;
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -218,7 +226,7 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
           transition={{ delay: 1.1 }}
           className="mt-10 flex flex-col items-start justify-between gap-8 md:flex-row md:items-end"
         >
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <motion.span
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -239,6 +247,30 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
             >
               <MapPin className="h-3 w-3 text-[#00F0FF]" /> {HERO_DATA.locationTag}
             </motion.span>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                playTactileClick('spark');
+                onOpenMotionLab?.();
+              }}
+              data-cursor="hover"
+              className="glass-pill flex cursor-pointer items-center gap-1.5 rounded-full border border-[#00F0FF]/50 bg-[#00F0FF]/10 px-3 py-1.5 font-mono-tech text-[10px] tracking-[0.15em] text-[#00F0FF] transition-all hover:bg-[#00F0FF]/25 shadow-[0_0_15px_rgba(0,240,255,0.25)]"
+            >
+              <Sliders className="h-3 w-3" /> SPRING LAB
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                playTactileClick('combo');
+                onToggleGameMode?.();
+              }}
+              data-cursor="hover"
+              className="glass-pill flex cursor-pointer items-center gap-1.5 rounded-full border border-[#F5B83D]/50 bg-[#F5B83D]/10 px-3 py-1.5 font-mono-tech text-[10px] tracking-[0.15em] text-[#F5B83D] transition-all hover:bg-[#F5B83D]/25 shadow-[0_0_15px_rgba(245,184,61,0.25)]"
+            >
+              <Gamepad2 className="h-3 w-3" /> 🕹️ GAME MODE
+            </motion.button>
           </div>
           <div className="font-mono-tech max-w-[240px] text-[10px] leading-relaxed tracking-[0.2em] text-zinc-400 md:text-right">
             {HERO_DATA.rightCollabLines.map((l) => (

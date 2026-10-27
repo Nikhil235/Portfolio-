@@ -59,14 +59,14 @@ export const HERO_DATA = {
   locationTag: 'BANGALORE, IN — 2026',
   leftBioLines: [
     "HI, I'M NIKHIL ARJUN.",
-    'DESIGN ENGINEER BRIDGING',
-    'FIGMA PRECISION &',
-    'PRODUCTION REACT.',
+    'DESIGN TECHNOLOGIST //',
+    'MOTION · GRAPHIC SYSTEMS',
+    '· PLAYABLE GAME PHYSICS.',
   ],
   rightCollabLines: [
-    'OPEN TO OPPORTUNITIES:',
-    'UI DEVELOPER · FRONTEND DESIGN',
-    'PRODUCT DESIGN & TOKENS.',
+    'FAANG / STUDIO READY:',
+    'CREATIVE TECH · DESIGN SYSTEMS',
+    '120FPS MOTION · GAME FEEL.',
   ],
   socials: {
     github: 'https://github.com/nikhilarjun',

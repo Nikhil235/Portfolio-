@@ -15,7 +15,7 @@ export function toggleSound() {
   return soundEnabled;
 }
 
-export type SoundType = 'thock' | 'click' | 'spark' | 'key';
+export type SoundType = 'thock' | 'click' | 'spark' | 'key' | 'combo' | 'hit';
 
 export function playTactileClick(type: SoundType = 'thock') {
   if (!soundEnabled || typeof window === 'undefined') return;
@@ -63,6 +63,27 @@ export function playTactileClick(type: SoundType = 'thock') {
       osc.connect(gain).connect(audioCtx.destination);
       osc.start(t);
       osc.stop(t + 0.03);
+    } else if (type === 'combo') {
+      // Ascending arcade chime for game combos
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587 + jitter, t);
+      osc.frequency.setValueAtTime(880 + jitter, t + 0.04);
+      osc.frequency.exponentialRampToValueAtTime(1174, t + 0.09);
+      gain.gain.setValueAtTime(0.06, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.13);
+    } else if (type === 'hit') {
+      // Punchy 80Hz bass kick for game feel impact
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(220, t);
+      osc.frequency.exponentialRampToValueAtTime(45, t + 0.06);
+      gain.gain.setValueAtTime(0.09, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.07);
     } else {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(950 + jitter, t);
