@@ -1,7 +1,5 @@
-'use client';
-
-import { useRef } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useSpring } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import { Zap, Bot, ArrowDown, MapPin } from 'lucide-react';
 import { HERO_DATA } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './Icons';
@@ -28,6 +26,109 @@ function Line({ i, children }: { i: number; children: React.ReactNode }) {
         {children}
       </motion.div>
     </div>
+  );
+}
+
+function ElectricZap() {
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
+
+  const triggerSpark = () => {
+    playTactileClick('spark');
+    const newParticles = Array.from({ length: 12 }).map((_, idx) => {
+      const angle = (idx / 12) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+      const distance = 40 + Math.random() * 40;
+      return {
+        id: Date.now() + idx + Math.random(),
+        x: Math.cos(angle) * distance,
+        y: Math.sin(angle) * distance,
+        color: idx % 3 === 0 ? '#F5B83D' : '#00F0FF',
+      };
+    });
+    setParticles(newParticles);
+    setTimeout(() => setParticles([]), 550);
+  };
+
+  return (
+    <span className="relative inline-grid place-items-center">
+      <motion.span
+        initial={{ rotate: -30, scale: 0 }}
+        animate={{ rotate: 0, scale: 1 }}
+        transition={{ delay: 1, type: 'spring', stiffness: 200 }}
+        whileHover={{ scale: 1.35, rotate: 18 }}
+        whileTap={{ scale: 0.85, rotate: -18 }}
+        onClick={triggerSpark}
+        onMouseEnter={() => {
+          if (particles.length === 0) triggerSpark();
+        }}
+        data-cursor="hover"
+        title="Click or hover for electric spark!"
+        className="inline-grid cursor-pointer select-none"
+      >
+        <Zap
+          className="h-[0.78em] w-[0.78em] text-[#38bdf8] drop-shadow-[0_0_24px_rgba(0,240,255,.5)] transition-all duration-300 hover:drop-shadow-[0_0_42px_rgba(0,240,255,1)]"
+          strokeWidth={1.6}
+        />
+      </motion.span>
+      <AnimatePresence>
+        {particles.map((p) => (
+          <motion.span
+            key={p.id}
+            initial={{ x: 0, y: 0, opacity: 1, scale: 1.4 }}
+            animate={{ x: p.x, y: p.y, opacity: 0, scale: 0.2 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+            className="pointer-events-none absolute h-1.5 w-1.5 rounded-full"
+            style={{ backgroundColor: p.color, boxShadow: `0 0 12px ${p.color}` }}
+          />
+        ))}
+      </AnimatePresence>
+    </span>
+  );
+}
+
+function InteractiveBot() {
+  const [bouncing, setBouncing] = useState(false);
+
+  const triggerBounce = () => {
+    playTactileClick('thock');
+    setBouncing(true);
+    setTimeout(() => setBouncing(false), 600);
+  };
+
+  return (
+    <motion.span
+      initial={{ y: 40, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 1.15, type: 'spring', stiffness: 180 }}
+      whileHover={{ scale: 1.35 }}
+      whileTap={{ scale: 0.85, rotate: 14 }}
+      onClick={triggerBounce}
+      onMouseEnter={() => {
+        if (!bouncing) triggerBounce();
+      }}
+      data-cursor="hover"
+      title="Click or hover the bot!"
+      className="inline-grid cursor-pointer select-none"
+    >
+      <motion.span
+        animate={
+          bouncing
+            ? { y: [0, -24, 4, -8, 0], rotate: [0, -15, 12, -6, 0] }
+            : { y: [0, -8, 0] }
+        }
+        transition={
+          bouncing
+            ? { duration: 0.55, ease: [0.23, 1, 0.32, 1] }
+            : { repeat: Infinity, duration: 3, ease: 'easeInOut' }
+        }
+        className="inline-grid"
+      >
+        <Bot
+          className="h-[0.78em] w-[0.78em] text-[#F5B83D] drop-shadow-[0_0_24px_rgba(245,184,61,.45)] transition-all duration-300 hover:drop-shadow-[0_0_42px_rgba(245,184,61,1)]"
+          strokeWidth={2}
+        />
+      </motion.span>
+    </motion.span>
   );
 }
 
@@ -104,50 +205,10 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
         >
           <Line i={0}>FIGMA &amp; CODE</Line>
           <Line i={1}>
-            DE
-            <motion.span
-              initial={{ rotate: -30, scale: 0 }}
-              animate={{ rotate: 0, scale: 1 }}
-              transition={{ delay: 1, type: 'spring', stiffness: 200 }}
-              whileHover={{ scale: 1.35, rotate: 18 }}
-              whileTap={{ scale: 0.85, rotate: -15 }}
-              onClick={() => playTactileClick('click')}
-              data-cursor="hover"
-              title="Click or hover for electric spark!"
-              className="inline-grid cursor-pointer select-none"
-            >
-              <Zap
-                className="h-[0.78em] w-[0.78em] text-[#38bdf8] drop-shadow-[0_0_24px_rgba(0,240,255,.5)] transition-all duration-300 hover:drop-shadow-[0_0_36px_rgba(0,240,255,1)]"
-                strokeWidth={1.6}
-              />
-            </motion.span>
-            SIGN
+            DE<ElectricZap />SIGN
           </Line>
           <Line i={2}>
-            EN
-            <motion.span
-              initial={{ y: 40, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 1.15, type: 'spring', stiffness: 180 }}
-              whileHover={{ scale: 1.35 }}
-              whileTap={{ scale: 0.88, rotate: 12 }}
-              onClick={() => playTactileClick('thock')}
-              data-cursor="hover"
-              title="Click or hover the bot!"
-              className="inline-grid cursor-pointer select-none"
-            >
-              <motion.span
-                animate={{ y: [0, -8, 0] }}
-                transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-                className="inline-grid"
-              >
-                <Bot
-                  className="h-[0.78em] w-[0.78em] text-[#F5B83D] drop-shadow-[0_0_24px_rgba(245,184,61,.45)] transition-all duration-300 hover:drop-shadow-[0_0_36px_rgba(245,184,61,1)]"
-                  strokeWidth={2}
-                />
-              </motion.span>
-            </motion.span>
-            GINEER
+            EN<InteractiveBot />GINEER
           </Line>
         </motion.h1>
 

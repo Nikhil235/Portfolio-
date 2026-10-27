@@ -6,6 +6,7 @@ import { ArrowUpRight, Mail } from 'lucide-react';
 import { GALLERY_ITEMS, HERO_DATA } from '../data/portfolioData';
 import { MaskedLines, ParallaxFade } from './ScrollText';
 import SafeImage from './SafeImage';
+import { playTactileClick } from '../hooks/useSound';
 
 function MagneticButton({ children, href }: { children: React.ReactNode; href: string }) {
   const ref = useRef<HTMLAnchorElement>(null);
@@ -17,6 +18,8 @@ function MagneticButton({ children, href }: { children: React.ReactNode; href: s
       ref={ref}
       href={href}
       style={{ x, y }}
+      onClick={() => playTactileClick('thock')}
+      onMouseEnter={() => playTactileClick('click')}
       onMouseMove={(e) => {
         const r = ref.current!.getBoundingClientRect();
         x.set((e.clientX - r.left - r.width / 2) * 0.4);
@@ -54,6 +57,8 @@ export default function GallerySection() {
             <motion.figure
               key={g.id}
               data-cursor="hover"
+              onMouseEnter={() => playTactileClick('click')}
+              onClick={() => playTactileClick('thock')}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-10%' }}
@@ -104,6 +109,9 @@ export function Footer() {
           <motion.a
             href={`mailto:${HERO_DATA.socials.email}`}
             whileHover={{ x: 8 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => playTactileClick('thock')}
+            onMouseEnter={() => playTactileClick('click')}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             className="group mt-6 inline-flex items-center gap-4 font-display text-[clamp(2rem,7vw,6.5rem)] uppercase leading-none tracking-[-0.03em] transition-colors hover:text-[#00F0FF]"
           >

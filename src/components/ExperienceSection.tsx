@@ -6,6 +6,7 @@ import { ArrowUpRight, Award } from 'lucide-react';
 import { EXPERIENCE_ITEMS, FEATURED_BLOGS } from '../data/portfolioData';
 import { MaskedLines, CounterParallaxWatermark } from './ScrollText';
 import SafeImage from './SafeImage';
+import { playTactileClick } from '../hooks/useSound';
 
 function ExperienceList() {
   const [hovered, setHovered] = useState<number | null>(null);
@@ -29,11 +30,12 @@ function ExperienceList() {
         {item && (
           <motion.div
             key="preview"
-            className="pointer-events-none absolute left-0 top-0 z-20 hidden w-80 overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900 lg:block"
+            className="pointer-events-none absolute left-0 top-0 z-20 hidden w-80 overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900 lg:block shadow-2xl"
             style={{ x: sx, y: sy, translateX: '-50%', translateY: '-110%' }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
           >
             <SafeImage src={item.previewImage} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
             <div className="flex items-center gap-2 p-3 font-mono-tech text-[10px] tracking-[0.2em] text-[#00F0FF]">
@@ -46,7 +48,10 @@ function ExperienceList() {
       {EXPERIENCE_ITEMS.map((e, i) => (
         <div
           key={e.id}
-          onMouseEnter={() => setHovered(i)}
+          onMouseEnter={() => {
+            setHovered(i);
+            playTactileClick('click');
+          }}
           data-cursor="hover"
           className="group grid gap-4 border-t border-[#27272a] py-8 transition-colors last:border-b md:grid-cols-12 md:items-center"
         >
@@ -68,6 +73,80 @@ function ExperienceList() {
         </div>
       ))}
     </div>
+  );
+}
+
+function BlogCard({ b }: { b: (typeof FEATURED_BLOGS)[0] }) {
+  const [hovered, setHovered] = useState(false);
+  const [coords, setCoords] = useState({ x: 50, y: 50 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    setCoords({
+      x: ((e.clientX - r.left) / r.width) * 100,
+      y: ((e.clientY - r.top) / r.height) * 100,
+    });
+  };
+
+  return (
+    <motion.article
+      data-cursor="hover"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => {
+        setHovered(true);
+        playTactileClick('click');
+      }}
+      onMouseLeave={() => setHovered(false)}
+      whileHover={{ y: -8, scale: 1.015 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: 'spring', stiffness: 240, damping: 20 }}
+      className="glass-card group relative w-[82vw] shrink-0 cursor-pointer overflow-hidden rounded-3xl transition-colors duration-300 hover:border-white/20 md:w-[520px]"
+    >
+      {/* Dynamic Specular Laser 1px Perimeter Border */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-3xl p-[1px] transition-opacity duration-300"
+        style={{
+          opacity: hovered ? 1 : 0,
+          background: `radial-gradient(280px circle at ${coords.x}% ${coords.y}%, ${b.accentColor}, transparent 65%)`,
+          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          WebkitMaskComposite: 'xor',
+          maskComposite: 'exclude',
+        }}
+      />
+
+      <div className="relative aspect-[16/9] overflow-hidden">
+        <SafeImage
+          src={b.image}
+          accent={b.accentColor}
+          alt=""
+          loading="lazy"
+          className="h-full w-full object-cover opacity-70 transition-transform duration-700 group-hover:scale-105"
+        />
+        <span
+          className="absolute left-4 top-4 rounded-full bg-black/70 px-3 py-1 font-mono-tech text-[10px] tracking-[0.15em] backdrop-blur border border-white/10"
+          style={{ color: b.accentColor }}
+        >
+          {b.tag}
+        </span>
+      </div>
+      <div className="relative p-6">
+        <div className="mb-3 flex gap-4 font-mono-tech text-[10px] text-zinc-500">
+          <span>{b.date}</span>
+          <span>{b.readTime}</span>
+        </div>
+        <h3 className="font-sans-tight text-xl font-bold leading-tight tracking-tight group-hover:text-white transition-colors">
+          {b.title}
+        </h3>
+        <p className="mt-3 line-clamp-2 text-sm text-zinc-400">{b.excerpt}</p>
+        <div
+          className="mt-5 flex items-center justify-between border-t border-[#27272a] pt-4 font-mono-tech text-[10px]"
+          style={{ color: b.accentColor }}
+        >
+          {b.metrics}
+          <ArrowUpRight className="h-4 w-4 text-zinc-500 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
+        </div>
+      </div>
+    </motion.article>
   );
 }
 
@@ -96,45 +175,7 @@ function BlogRail() {
         </div>
         <motion.div style={{ x }} className="relative z-10 flex gap-6 pl-5 md:pl-10">
           {FEATURED_BLOGS.map((b) => (
-            <motion.article
-              key={b.id}
-              data-cursor="hover"
-              whileHover={{ y: -8, scale: 1.015 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: 'spring', stiffness: 240, damping: 20 }}
-              className="glass-card group w-[82vw] shrink-0 cursor-pointer overflow-hidden rounded-3xl transition-colors duration-300 hover:border-white/20 md:w-[520px]"
-            >
-              <div className="relative aspect-[16/9] overflow-hidden">
-                <SafeImage
-                  src={b.image}
-                  accent={b.accentColor}
-                  alt=""
-                  loading="lazy"
-                  className="h-full w-full object-cover opacity-70 transition-transform duration-700 group-hover:scale-105"
-                />
-                <span
-                  className="absolute left-4 top-4 rounded-full bg-black/70 px-3 py-1 font-mono-tech text-[10px] tracking-[0.15em] backdrop-blur"
-                  style={{ color: b.accentColor }}
-                >
-                  {b.tag}
-                </span>
-              </div>
-              <div className="p-6">
-                <div className="mb-3 flex gap-4 font-mono-tech text-[10px] text-zinc-500">
-                  <span>{b.date}</span>
-                  <span>{b.readTime}</span>
-                </div>
-                <h3 className="font-sans-tight text-xl font-bold leading-tight tracking-tight">{b.title}</h3>
-                <p className="mt-3 line-clamp-2 text-sm text-zinc-400">{b.excerpt}</p>
-                <div
-                  className="mt-5 flex items-center justify-between border-t border-[#27272a] pt-4 font-mono-tech text-[10px]"
-                  style={{ color: b.accentColor }}
-                >
-                  {b.metrics}
-                  <ArrowUpRight className="h-4 w-4 text-zinc-500 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
-                </div>
-              </div>
-            </motion.article>
+            <BlogCard key={b.id} b={b} />
           ))}
         </motion.div>
       </div>
