@@ -96,10 +96,13 @@ function BlogRail() {
         </div>
         <motion.div style={{ x }} className="relative z-10 flex gap-6 pl-5 md:pl-10">
           {FEATURED_BLOGS.map((b) => (
-            <article
+            <motion.article
               key={b.id}
               data-cursor="hover"
-              className="glass-card group w-[82vw] shrink-0 overflow-hidden rounded-3xl md:w-[520px]"
+              whileHover={{ y: -8, scale: 1.015 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 240, damping: 20 }}
+              className="glass-card group w-[82vw] shrink-0 cursor-pointer overflow-hidden rounded-3xl transition-colors duration-300 hover:border-white/20 md:w-[520px]"
             >
               <div className="relative aspect-[16/9] overflow-hidden">
                 <SafeImage
@@ -128,10 +131,10 @@ function BlogRail() {
                   style={{ color: b.accentColor }}
                 >
                   {b.metrics}
-                  <ArrowUpRight className="h-4 w-4 text-zinc-500 group-hover:text-white" />
+                  <ArrowUpRight className="h-4 w-4 text-zinc-500 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
                 </div>
               </div>
-            </article>
+            </motion.article>
           ))}
         </motion.div>
       </div>

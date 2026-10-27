@@ -93,15 +93,17 @@ export default function StatsSection() {
         <ParallaxFade className="w-full max-w-3xl" distance={40}>
           <div className="glass-card mt-14 grid w-full grid-cols-2 rounded-2xl md:grid-cols-4">
             {KEY_METRICS.map((m, i) => (
-              <div
+              <motion.div
                 key={m.id}
-                className={`flex flex-col items-center gap-2 px-4 py-6 ${
+                whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+                transition={{ duration: 0.2 }}
+                className={`flex flex-col items-center gap-2 px-4 py-6 transition-colors ${
                   i > 0 ? 'md:border-l' : ''
                 } ${i % 2 ? 'border-l md:border-l' : ''} ${i > 1 ? 'border-t md:border-t-0' : ''} border-[#27272a]`}
               >
                 <span className="font-mono-tech text-[9px] tracking-[0.2em] text-zinc-500">{m.label}</span>
                 <Counter start={m.startValue} end={m.endValue} decimals={m.decimals} suffix={m.suffix} run={run} />
-              </div>
+              </motion.div>
             ))}
           </div>
         </ParallaxFade>

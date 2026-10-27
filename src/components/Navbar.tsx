@@ -78,21 +78,31 @@ export default function Navbar({ onNav }: { onNav: (href: string) => void }) {
     >
       <Clock />
       <nav className="glass-pill hidden items-center gap-1 rounded-full p-1 md:flex">
-        {LINKS.map((l) => (
-          <button
-            key={l.href}
-            onClick={() => {
-              playTactileClick('thock');
-              setActive(l.href);
-              onNav(l.href);
-            }}
-            className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
-              active === l.href ? 'bg-white text-black' : 'text-zinc-400 hover:text-white'
-            }`}
-          >
-            {l.label}
-          </button>
-        ))}
+        {LINKS.map((l) => {
+          const isActive = active === l.href;
+          return (
+            <button
+              key={l.href}
+              onClick={() => {
+                playTactileClick('thock');
+                setActive(l.href);
+                onNav(l.href);
+              }}
+              className={`relative rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+                isActive ? 'text-black' : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="active-nav-pill"
+                  transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                  className="absolute inset-0 rounded-full bg-white"
+                />
+              )}
+              <span className="relative z-10">{l.label}</span>
+            </button>
+          );
+        })}
       </nav>
       <div className="flex items-center gap-1">
         <button

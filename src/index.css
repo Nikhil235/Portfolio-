@@ -148,3 +148,10 @@
     cursor: none !important;
   }
 }
+
+/* Emil Kowalski tactile active physics */
+button:active:not(:disabled),
+a[role="button"]:active:not(:disabled) {
+  transform: scale(0.96);
+  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
