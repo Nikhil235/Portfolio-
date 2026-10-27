@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowUpRight } from 'lucide-react';
-import { MaskedLines, ParallaxFade } from './ScrollText';
+import { MaskedLines, ParallaxFade, WordScrubHighlight } from './ScrollText';
 import { HERO_DATA } from '../data/portfolioData';
 
 export default function PhilosophySection() {
@@ -14,18 +14,18 @@ export default function PhilosophySection() {
           <span className="text-rose-400">// BELIEVES</span>
           <span className="text-zinc-600">01 — PHILOSOPHY</span>
         </div>
-        <MaskedLines
+        <WordScrubHighlight
+          as="h2"
+          text={`"From Figma to production.. with the motion intact and zero drift..."`}
+          accents={{
+            Figma: '#00F0FF',
+            production: '#38bdf8',
+            motion: '#F5B83D',
+            zero: '#00F0FF',
+            drift: '#00F0FF',
+          }}
+          italics={['and', 'zero', 'drift']}
           className="font-sans-tight text-[clamp(2.4rem,6.4vw,6rem)] font-bold leading-[0.98] tracking-[-0.04em]"
-          lines={[
-            <>
-              <span className="text-zinc-600">"</span>From Figma to <span className="text-zinc-500">production..</span>
-            </>,
-            <>
-              with the motion intact{' '}
-              <span className="font-serif-editorial font-normal italic tracking-normal">and zero drift</span>
-              <span className="text-zinc-600">..."</span>
-            </>,
-          ]}
         />
 
         <div className="mt-16 grid gap-10 border-t border-[#27272a] pt-10 md:grid-cols-3">
@@ -33,13 +33,16 @@ export default function PhilosophySection() {
             {
               h: null,
               body: (
-                <p className="text-lg leading-snug text-zinc-200">
-                  I design in Figma and build the same screens in React, so{' '}
-                  <span className="font-medium text-[#00F0FF] drop-shadow-[0_0_14px_rgba(0,240,255,0.4)]">
-                    nothing gets lost in handoff
-                  </span>
-                  . One person owning the work from the first wireframe to the shipped component.
-                </p>
+                <WordScrubHighlight
+                  text="I design in Figma and build the same screens in React, so nothing gets lost in handoff. One person owning the work from the first wireframe to the shipped component."
+                  accents={{
+                    Figma: '#00F0FF',
+                    React: '#00F0FF',
+                    handoff: '#00F0FF',
+                    shipped: '#10B981',
+                  }}
+                  className="text-lg leading-snug text-zinc-200"
+                />
               ),
             },
             {

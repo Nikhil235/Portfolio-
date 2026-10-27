@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Bot, Terminal, Sliders, Layers, ArrowUpRight } from 'lucide-react';
 import { useTilt3D } from '../hooks/useTilt3D';
 import { TECH_ARSENAL } from '../data/portfolioData';
-import { MaskedLines, ParallaxFade } from './ScrollText';
+import { MaskedLines, ParallaxFade, WordScrubHighlight } from './ScrollText';
 import { playTactileClick } from '../hooks/useSound';
 
 function TiltCard({
@@ -125,11 +125,17 @@ export default function BentoGrid() {
                 <h3 className="font-syne text-4xl font-extrabold leading-none md:text-5xl">
                   Three-Tier<br />Tokens
                 </h3>
-                <ParallaxFade distance={30}>
-                  <p className="max-w-sm text-sm leading-relaxed text-zinc-400">
-                    Primitives → Semantic Aliases → Component tokens. Engineered variant matrices (16-variant SearchBar, 36-variant Danger Buttons) eliminating handoff drift.
-                  </p>
-                </ParallaxFade>
+                <WordScrubHighlight
+                  text="Primitives → Semantic Aliases → Component tokens. Engineered variant matrices (16-variant SearchBar, 36-variant Danger Buttons) eliminating handoff drift."
+                  accents={{
+                    Primitives: '#F5B83D',
+                    Semantic: '#10B981',
+                    Component: '#00F0FF',
+                    matrices: '#F5B83D',
+                    drift: '#00F0FF',
+                  }}
+                  className="max-w-sm text-sm leading-relaxed text-zinc-400"
+                />
                 <Tags items={['Figma Tokens', 'Token Studio', 'Auto-Layout 5.0', 'React 19', 'Storybook', 'Tailwind v4']} />
               </div>
               <RetroRobot />

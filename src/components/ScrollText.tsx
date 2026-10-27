@@ -127,3 +127,109 @@ export function CounterParallaxWatermark({
     </motion.div>
   );
 }
+
+/* 4. WordScrubHighlight: Apple/Linear-style scrubbed word-by-word scroll illumination */
+function WordItem({
+  p,
+  start,
+  end,
+  word,
+  accentColor,
+  italic = false,
+}: {
+  p: MotionValue<number>;
+  start: number;
+  end: number;
+  word: string;
+  accentColor?: string;
+  italic?: boolean;
+}) {
+  const opacity = useTransform(p, [start, end], [0.18, 1]);
+  const y = useTransform(p, [start, end], [4, 0]);
+  const isAccent = !!accentColor;
+
+  return (
+    <span className="relative inline-block mr-[0.28em] my-[0.04em]">
+      <motion.span
+        style={{
+          opacity,
+          y,
+          willChange: 'opacity, transform',
+          color: isAccent ? accentColor : undefined,
+          textShadow: isAccent ? `0 0 20px ${accentColor}80` : undefined,
+        }}
+        className={`inline-block ${isAccent ? 'font-semibold' : ''} ${italic ? 'italic font-serif-editorial tracking-normal' : ''}`}
+      >
+        {word}
+      </motion.span>
+    </span>
+  );
+}
+
+export function WordScrubHighlight({
+  text,
+  accents = {},
+  italics = [],
+  className = '',
+  offset = ['start 85%', 'end 45%'],
+  as: Component = 'p',
+}: {
+  text: string;
+  accents?: Record<string, string>;
+  italics?: string[];
+  className?: string;
+  offset?: Off;
+  as?: any;
+}) {
+  const { ref, p } = useProgress<HTMLElement>(offset);
+  const reduce = useReducedMotion();
+
+  const words = text.split(/\s+/).filter(Boolean);
+  const total = words.length;
+
+  if (reduce) {
+    return (
+      <Component className={className}>
+        {words.map((w, i) => {
+          const clean = w.replace(/[^a-zA-Z0-9-]/g, '');
+          const accentColor = accents[clean] || accents[w];
+          const isItalic = italics.includes(clean) || italics.includes(w);
+          return (
+            <span
+              key={i}
+              className={`mr-[0.28em] ${accentColor ? 'font-semibold' : ''} ${isItalic ? 'italic font-serif-editorial' : ''}`}
+              style={{ color: accentColor }}
+            >
+              {w}
+            </span>
+          );
+        })}
+      </Component>
+    );
+  }
+
+  return (
+    <Component ref={ref} className={className} aria-label={text}>
+      <span aria-hidden="true" className="inline">
+        {words.map((w, i) => {
+          const clean = w.replace(/[^a-zA-Z0-9-]/g, '');
+          const accentColor = accents[clean] || accents[w];
+          const isItalic = italics.includes(clean) || italics.includes(w);
+          const start = i / total;
+          const end = Math.min(start + 1.2 / total, 1);
+          return (
+            <WordItem
+              key={i}
+              p={p}
+              start={start}
+              end={end}
+              word={w}
+              accentColor={accentColor}
+              italic={isItalic}
+            />
+          );
+        })}
+      </span>
+    </Component>
+  );
+}
