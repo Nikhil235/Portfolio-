@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'framer-motion';
-import { Mail, Volume2, VolumeX, Sliders, Gamepad2 } from 'lucide-react';
+import { Mail, Volume2, VolumeX, Sliders, Sparkles } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './Icons';
 import { HERO_DATA } from '../data/portfolioData';
 import { playTactileClick, toggleSound, isSoundEnabled } from '../hooks/useSound';
@@ -37,13 +37,11 @@ function Clock() {
 export default function Navbar({
   onNav,
   onOpenMotionLab,
-  onToggleGameMode,
-  isGameModeActive,
+  onOpenPlaygrounds,
 }: {
   onNav: (href: string) => void;
   onOpenMotionLab?: () => void;
-  onToggleGameMode?: () => void;
-  isGameModeActive?: boolean;
+  onOpenPlaygrounds?: () => void;
 }) {
   const [active, setActive] = useState('#home');
   const [soundOn, setSoundOn] = useState(true);
@@ -130,19 +128,15 @@ export default function Navbar({
 
         <button
           onClick={() => {
-            playTactileClick('combo');
-            onToggleGameMode?.();
+            playTactileClick('spark');
+            onOpenPlaygrounds?.();
           }}
           data-cursor="hover"
-          title={isGameModeActive ? 'Exit Game Mode' : 'Enter 120FPS Game Mode'}
-          className={`flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono-tech text-[10px] transition-all ${
-            isGameModeActive
-              ? 'border-rose-500 bg-rose-500/20 text-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.4)]'
-              : 'border-[#F5B83D]/40 bg-[#F5B83D]/10 text-[#F5B83D] hover:bg-[#F5B83D]/25 shadow-[0_0_12px_rgba(245,184,61,0.25)]'
-          }`}
+          title="Open Interactive Playgrounds Drawer"
+          className="flex items-center gap-1.5 rounded-full border border-[#00F0FF]/40 bg-[#00F0FF]/10 px-3 py-1 font-mono-tech text-[10px] text-[#00F0FF] transition-all hover:bg-[#00F0FF]/25 shadow-[0_0_12px_rgba(0,240,255,0.25)]"
         >
-          <Gamepad2 className="h-3 w-3" />
-          <span>{isGameModeActive ? 'EXIT ARCADE' : 'ARCADE'}</span>
+          <Sparkles className="h-3 w-3" />
+          <span>PLAYGROUNDS</span>
         </button>
 
         <button

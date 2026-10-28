@@ -13,14 +13,14 @@ import BentoGrid from './components/BentoGrid';
 import ExperienceSection from './components/ExperienceSection';
 import GallerySection, { Footer } from './components/GallerySection';
 import MotionLabModal from './components/MotionLabModal';
-import GameHud from './components/GameHud';
+import PlaygroundDrawer from './components/PlaygroundDrawer';
 
 export default function App() {
   // Lazy initializer: decided before first paint, so refreshes / reduced-motion
   // users never see even a frame of the black intro screen.
   const [loading, setLoading] = useState(() => !shouldSkipPreloader());
   const [motionLabOpen, setMotionLabOpen] = useState(false);
-  const [gameModeActive, setGameModeActive] = useState(false);
+  const [playgroundOpen, setPlaygroundOpen] = useState(false);
 
   const { scrollTo } = useLenis(!loading);
   const done = useCallback(() => setLoading(false), []);
@@ -34,14 +34,13 @@ export default function App() {
           <Navbar
             onNav={scrollTo}
             onOpenMotionLab={() => setMotionLabOpen(true)}
-            onToggleGameMode={() => setGameModeActive((prev) => !prev)}
-            isGameModeActive={gameModeActive}
+            onOpenPlaygrounds={() => setPlaygroundOpen(true)}
           />
           <main>
             <HeroSection
               onNav={scrollTo}
               onOpenMotionLab={() => setMotionLabOpen(true)}
-              onToggleGameMode={() => setGameModeActive((prev) => !prev)}
+              onOpenPlaygrounds={() => setPlaygroundOpen(true)}
             />
             <PhilosophySection />
             <StatsSection />
@@ -51,14 +50,15 @@ export default function App() {
           </main>
           <Footer />
 
-          {/* FAANG Motion Engineering & Game Feel Labs */}
+          {/* FAANG Motion Engineering & Live Playgrounds */}
           <MotionLabModal
             isOpen={motionLabOpen}
             onClose={() => setMotionLabOpen(false)}
           />
-          <GameHud
-            isActive={gameModeActive}
-            onClose={() => setGameModeActive(false)}
+          <PlaygroundDrawer
+            isOpen={playgroundOpen}
+            onClose={() => setPlaygroundOpen(false)}
+            onOpenSpringLab={() => setMotionLabOpen(true)}
           />
         </>
       )}
