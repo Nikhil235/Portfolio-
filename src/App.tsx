@@ -12,15 +12,10 @@ import StatsSection from './components/StatsSection';
 import BentoGrid from './components/BentoGrid';
 import ExperienceSection from './components/ExperienceSection';
 import GallerySection, { Footer } from './components/GallerySection';
-import MotionLabModal from './components/MotionLabModal';
-import PlaygroundDrawer from './components/PlaygroundDrawer';
-
 export default function App() {
   // Lazy initializer: decided before first paint, so refreshes / reduced-motion
   // users never see even a frame of the black intro screen.
   const [loading, setLoading] = useState(() => !shouldSkipPreloader());
-  const [motionLabOpen, setMotionLabOpen] = useState(false);
-  const [playgroundOpen, setPlaygroundOpen] = useState(false);
 
   const { scrollTo } = useLenis(!loading);
   const done = useCallback(() => setLoading(false), []);
@@ -31,17 +26,9 @@ export default function App() {
       <AnimatePresence>{loading && <Preloader onDone={done} />}</AnimatePresence>
       {!loading && (
         <>
-          <Navbar
-            onNav={scrollTo}
-            onOpenMotionLab={() => setMotionLabOpen(true)}
-            onOpenPlaygrounds={() => setPlaygroundOpen(true)}
-          />
+          <Navbar onNav={scrollTo} />
           <main>
-            <HeroSection
-              onNav={scrollTo}
-              onOpenMotionLab={() => setMotionLabOpen(true)}
-              onOpenPlaygrounds={() => setPlaygroundOpen(true)}
-            />
+            <HeroSection onNav={scrollTo} />
             <PhilosophySection />
             <StatsSection />
             <BentoGrid />
@@ -49,17 +36,6 @@ export default function App() {
             <GallerySection />
           </main>
           <Footer />
-
-          {/* FAANG Motion Engineering & Live Playgrounds */}
-          <MotionLabModal
-            isOpen={motionLabOpen}
-            onClose={() => setMotionLabOpen(false)}
-          />
-          <PlaygroundDrawer
-            isOpen={playgroundOpen}
-            onClose={() => setPlaygroundOpen(false)}
-            onOpenSpringLab={() => setMotionLabOpen(true)}
-          />
         </>
       )}
     </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'framer-motion';
-import { Mail, Volume2, VolumeX, Sliders, Sparkles } from 'lucide-react';
+import { Mail, Volume2, VolumeX } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './Icons';
 import { HERO_DATA } from '../data/portfolioData';
 import { playTactileClick, toggleSound, isSoundEnabled } from '../hooks/useSound';
@@ -34,15 +34,7 @@ function Clock() {
   );
 }
 
-export default function Navbar({
-  onNav,
-  onOpenMotionLab,
-  onOpenPlaygrounds,
-}: {
-  onNav: (href: string) => void;
-  onOpenMotionLab?: () => void;
-  onOpenPlaygrounds?: () => void;
-}) {
+export default function Navbar({ onNav }: { onNav: (href: string) => void }) {
   const [active, setActive] = useState('#home');
   const [soundOn, setSoundOn] = useState(true);
   const [hidden, setHidden] = useState(false);
@@ -113,31 +105,6 @@ export default function Navbar({
         })}
       </nav>
       <div className="flex items-center gap-2">
-        <button
-          onClick={() => {
-            playTactileClick('spark');
-            onOpenMotionLab?.();
-          }}
-          data-cursor="hover"
-          title="Open Motion Physics Lab"
-          className="hidden items-center gap-1.5 rounded-full border border-[#00F0FF]/40 bg-[#00F0FF]/10 px-3 py-1 font-mono-tech text-[10px] text-[#00F0FF] transition-all hover:bg-[#00F0FF]/25 shadow-[0_0_12px_rgba(0,240,255,0.25)] sm:flex"
-        >
-          <Sliders className="h-3 w-3" />
-          <span>SPRING LAB</span>
-        </button>
-
-        <button
-          onClick={() => {
-            playTactileClick('spark');
-            onOpenPlaygrounds?.();
-          }}
-          data-cursor="hover"
-          title="Open Interactive Playgrounds Drawer"
-          className="flex items-center gap-1.5 rounded-full border border-[#00F0FF]/40 bg-[#00F0FF]/10 px-3 py-1 font-mono-tech text-[10px] text-[#00F0FF] transition-all hover:bg-[#00F0FF]/25 shadow-[0_0_12px_rgba(0,240,255,0.25)]"
-        >
-          <Sparkles className="h-3 w-3" />
-          <span>PLAYGROUNDS</span>
-        </button>
 
         <button
           onClick={() => {

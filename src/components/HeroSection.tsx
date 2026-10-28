@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
-import { Zap, Bot, ArrowDown, MapPin, Sliders, Sparkles } from 'lucide-react';
+import { Zap, Bot, ArrowDown, MapPin } from 'lucide-react';
 import { HERO_DATA } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './Icons';
 import { playTactileClick } from '../hooks/useSound';
@@ -132,15 +132,7 @@ function InteractiveBot() {
   );
 }
 
-export default function HeroSection({
-  onNav,
-  onOpenMotionLab,
-  onOpenPlaygrounds,
-}: {
-  onNav: (h: string) => void;
-  onOpenMotionLab?: () => void;
-  onOpenPlaygrounds?: () => void;
-}) {
+export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
   const s = HERO_DATA.socials;
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -247,30 +239,6 @@ export default function HeroSection({
             >
               <MapPin className="h-3 w-3 text-[#00F0FF]" /> {HERO_DATA.locationTag}
             </motion.span>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                playTactileClick('spark');
-                onOpenMotionLab?.();
-              }}
-              data-cursor="hover"
-              className="glass-pill flex cursor-pointer items-center gap-1.5 rounded-full border border-[#00F0FF]/50 bg-[#00F0FF]/10 px-3 py-1.5 font-mono-tech text-[10px] tracking-[0.15em] text-[#00F0FF] transition-all hover:bg-[#00F0FF]/25 shadow-[0_0_15px_rgba(0,240,255,0.25)]"
-            >
-              <Sliders className="h-3 w-3" /> SPRING LAB
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                playTactileClick('spark');
-                onOpenPlaygrounds?.();
-              }}
-              data-cursor="hover"
-              className="glass-pill flex cursor-pointer items-center gap-1.5 rounded-full border border-[#00F0FF]/50 bg-[#00F0FF]/10 px-3 py-1.5 font-mono-tech text-[10px] tracking-[0.15em] text-[#00F0FF] transition-all hover:bg-[#00F0FF]/25 shadow-[0_0_15px_rgba(0,240,255,0.25)]"
-            >
-              <Sparkles className="h-3 w-3" /> 🧪 PLAYGROUNDS
-            </motion.button>
           </div>
           <div className="font-mono-tech max-w-[240px] text-[10px] leading-relaxed tracking-[0.2em] text-zinc-400 md:text-right">
             {HERO_DATA.rightCollabLines.map((l) => (
