@@ -12,9 +12,9 @@ import StatsSection from './components/StatsSection';
 import BentoGrid from './components/BentoGrid';
 import ExperienceSection from './components/ExperienceSection';
 import GallerySection, { Footer } from './components/GallerySection';
+
 export default function App() {
-  // Lazy initializer: decided before first paint, so refreshes / reduced-motion
-  // users never see even a frame of the black intro screen.
+  // Decided synchronously before first paint: plays once per session, skipped on reduced-motion.
   const [loading, setLoading] = useState(() => !shouldSkipPreloader());
 
   const { scrollTo } = useLenis(!loading);
@@ -24,21 +24,17 @@ export default function App() {
     <div className="min-h-screen bg-[#080808] text-white">
       <CustomCursor />
       <AnimatePresence>{loading && <Preloader onDone={done} />}</AnimatePresence>
-      {!loading && (
-        <>
-          <Navbar onNav={scrollTo} />
-          <main>
-            <HeroSection onNav={scrollTo} />
-            <PhilosophySection />
-            <StatsSection />
-            <BentoGrid />
-            <ExperienceSection />
-            <GallerySection />
-          </main>
-          <Footer />
-        </>
-      )}
+      {/* Content mounts immediately underneath so nothing pops in late after the curtain lifts */}
+      <Navbar onNav={scrollTo} />
+      <main>
+        <HeroSection onNav={scrollTo} />
+        <PhilosophySection />
+        <StatsSection />
+        <BentoGrid />
+        <ExperienceSection />
+        <GallerySection />
+      </main>
+      <Footer />
     </div>
   );
 }
-

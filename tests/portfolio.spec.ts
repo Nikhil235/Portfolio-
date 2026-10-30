@@ -1,36 +1,31 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Interactive Dark Portfolio', () => {
-  test('loads portfolio and transitions through preloader', async ({ page }) => {
+  test('loads portfolio, skips preloader, and renders renamed navigation items', async ({ page }) => {
     await page.goto('/');
 
-    // Check that preloader or main portfolio content is present
     const preloader = page.getByRole('status', { name: 'Loading portfolio' });
     if (await preloader.isVisible()) {
-      // Click or press a key to skip preloader quickly
       await page.keyboard.press('Space');
     }
 
-    // Main portfolio container should be visible
     await expect(page.locator('main')).toBeVisible({ timeout: 10000 });
-    
-    // Navbar should be rendered with navigation buttons
+
+    // Navbar should render all section-matched links
     await expect(page.locator('header')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Home' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'About' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Work' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Contact' })).toBeVisible();
+    for (const label of ['Home', 'Philosophy', 'Capabilities', 'Experience', 'Field Notes', 'Sketchbook', 'Contact']) {
+      await expect(page.getByRole('button', { name: label, exact: true })).toBeVisible();
+    }
   });
 
   test('skips preloader when reduced motion is preferred', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
 
-    // Directly renders main without preloader wait
     await expect(page.locator('main')).toBeVisible({ timeout: 5000 });
   });
 
-  test('navigates through portfolio sections', async ({ page }) => {
+  test('navigates through portfolio sections and copies contact email', async ({ page }) => {
     await page.addInitScript(() => {
       sessionStorage.setItem('na:preloader-seen', '1');
     });
@@ -38,18 +33,21 @@ test.describe('Interactive Dark Portfolio', () => {
     await page.goto('/');
     await expect(page.locator('main')).toBeVisible();
 
-    // Click "Work" nav link and check active state
-    const workBtn = page.getByRole('button', { name: 'Work' });
-    await expect(workBtn).toBeVisible();
-    await workBtn.click();
+    const expBtn = page.getByRole('button', { name: 'Experience', exact: true });
+    await expect(expBtn).toBeVisible();
+    await expBtn.click();
 
-    // Click "About" nav link
-    const aboutBtn = page.getByRole('button', { name: 'About' });
-    await expect(aboutBtn).toBeVisible();
-    await aboutBtn.click();
+    const philosophyBtn = page.getByRole('button', { name: 'Philosophy', exact: true });
+    await expect(philosophyBtn).toBeVisible();
+    await philosophyBtn.click();
+
+    // Verify visible contact email and copy button
+    await expect(page.getByText('nikhilarjun.design@gmail.com')).toBeVisible();
+    const copyBtn = page.getByRole('button', { name: /copy email/i });
+    await expect(copyBtn).toBeVisible();
   });
 
-  test('toggles tactile sound on and off', async ({ page }) => {
+  test('toggles tactile sound on and off (opt-in by default)', async ({ page }) => {
     await page.addInitScript(() => {
       sessionStorage.setItem('na:preloader-seen', '1');
     });
@@ -57,16 +55,17 @@ test.describe('Interactive Dark Portfolio', () => {
     await page.goto('/');
     await expect(page.locator('main')).toBeVisible();
 
-    // Find the sound toggle button
+    // Sound starts opt-in (off by default -> aria-label is 'Enable sound')
     const soundToggle = page.locator('button[aria-label*="sound" i]');
     await expect(soundToggle).toBeVisible();
-
-    // Toggle sound
-    await soundToggle.click();
     await expect(soundToggle).toHaveAttribute('aria-label', 'Enable sound');
 
-    // Toggle sound back on
+    // Click to enable sound
     await soundToggle.click();
     await expect(soundToggle).toHaveAttribute('aria-label', 'Mute sound');
+
+    // Click to mute sound again
+    await soundToggle.click();
+    await expect(soundToggle).toHaveAttribute('aria-label', 'Enable sound');
   });
 });

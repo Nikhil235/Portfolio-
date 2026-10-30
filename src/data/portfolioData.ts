@@ -1,5 +1,12 @@
-// Bundled via Vite static import → hashed URL in /assets, can never 404 like a remote/public path.
+// Bundled via Vite static imports → hashed URLs in /assets, never 404 or suffer from stock-photo mismatch.
 import tokenSearchbarImage from '../assets/token-searchbar-system.jpg';
+import sladeWilsonImage from '../assets/slade-wilson-chronograph.svg';
+import uiChecklistImage from '../assets/ui-checklist-inspector.svg';
+import bhringaBotanicalImage from '../assets/bhringa-botanical-ritual.svg';
+import sketchNadalImage from '../assets/sketch-nadal-rally.svg';
+import sketchBeckhamImage from '../assets/sketch-beckham-contrast.svg';
+import shapeFrameworkImage from '../assets/shape-framework-diagram.svg';
+import sketchSaiyanNarutoImage from '../assets/sketch-saiyan-naruto-study.svg';
 
 /**
  * Single source of truth for career dates. The "Years Crafting" stat and the
@@ -36,6 +43,7 @@ export interface BlogPost {
   image: string;
   accentColor: string;
   metrics: string;
+  liveUrl?: string;
   content: string[];
   codeSnippet: string;
 }
@@ -59,26 +67,26 @@ export const HERO_DATA = {
   locationTag: 'BANGALORE, IN — 2026',
   leftBioLines: [
     "HI, I'M NIKHIL ARJUN.",
-    'DESIGN TECHNOLOGIST //',
-    'MOTION · GRAPHIC SYSTEMS',
-    '· PLAYABLE GAME PHYSICS.',
+    'DESIGN ENGINEER BRIDGING',
+    'FIGMA PRECISION &',
+    'PRODUCTION REACT.',
   ],
   rightCollabLines: [
-    'FAANG / STUDIO READY:',
-    'CREATIVE TECH · DESIGN SYSTEMS',
-    '120FPS MOTION · GAME FEEL.',
+    'OPEN TO OPPORTUNITIES:',
+    'UI DEVELOPER · FRONTEND DESIGN',
+    'PRODUCT DESIGN & TOKENS.',
   ],
+  ctaRoles: 'UI Developer · Frontend Design · Product Design & Tokens',
   socials: {
-    github: 'https://github.com/nikhilarjun',
+    github: 'https://github.com/Nikhil235',
     linkedin: 'https://linkedin.com',
     instagram: 'https://instagram.com',
     email: 'nikhilarjun.design@gmail.com',
   },
   // Linked from the Philosophy section's quant-trading line.
-  // TODO: point `url` at the live trading dashboard / model case study once it's public.
   quantProject: {
     label: 'quantitative trading models',
-    url: 'https://github.com/nikhilarjun?tab=repositories&q=quant',
+    url: 'https://github.com/Nikhil235?tab=repositories',
   },
 };
 
@@ -89,23 +97,24 @@ export const STATS_LINES = [
     cursorColor: '#5865F2',
   },
   {
-    text: 'Scalable tokens. Fluid interactions.',
+    text: 'From atomic tokens to shipped React — every pixel earned.',
     blockColor: '#10B981', // Emerald Green
     cursorColor: '#10B981',
   },
-  {
-    text: 'From atomic values to tangible experiences —',
-    blockColor: '#F59E0B', // Amber Orange
-    cursorColor: '#F59E0B',
-  },
-  {
-    text: 'every pixel has a purpose.',
-    blockColor: '#EF4444', // Coral Red
-    cursorColor: '#EF4444',
-  },
 ];
 
-export const KEY_METRICS = [
+export interface KeyMetricItem {
+  id: string;
+  label: string;
+  startValue: number;
+  endValue: number;
+  decimals: number;
+  suffix: string;
+  accent: string;
+  description: string;
+}
+
+export const KEY_METRICS: KeyMetricItem[] = [
   {
     id: 'criteria',
     label: 'UI CRAFT CRITERIA',
@@ -113,6 +122,8 @@ export const KEY_METRICS = [
     endValue: 101,
     decimals: 0,
     suffix: ' Points',
+    accent: '#00F0FF',
+    description: 'Visual QA checks in my Shift Nudge inspection app covering layout, type, and contrast.',
   },
   {
     id: 'variants',
@@ -121,6 +132,8 @@ export const KEY_METRICS = [
     endValue: 52,
     decimals: 0,
     suffix: '+',
+    accent: '#10B981',
+    description: 'Production Figma & React component states mapped through a 3-tier token pipeline.',
   },
   {
     id: 'designers',
@@ -129,6 +142,8 @@ export const KEY_METRICS = [
     endValue: 1200,
     decimals: 0,
     suffix: '+',
+    accent: '#F5B83D',
+    description: 'Product designers and frontend engineers auditing interfaces with my open-source QA tool.',
   },
   {
     id: 'experience',
@@ -137,6 +152,8 @@ export const KEY_METRICS = [
     endValue: YEARS_CRAFTING,
     decimals: 0,
     suffix: '+ Years',
+    accent: '#8b93ff',
+    description: 'From analog ink portraiture and watercolor composition to production React engineering.',
   },
 ];
 
@@ -159,10 +176,10 @@ export const TECH_ARSENAL: TechArsenalItem[] = [
   { name: 'SHAPE Framework', domain: 'Methodology', level: 'Production' },
   { name: 'Shift Nudge 101 QA', domain: 'Methodology', level: 'Production' },
   { name: 'Storybook & Chromatic', domain: 'Design Systems', level: 'Production' },
-  { name: '16-Variant SearchBar', domain: 'Design Systems', level: 'Production' },
-  { name: '36-Variant Danger Buttons', domain: 'Design Systems', level: 'Production' },
-  { name: 'Accessibility & A11y', domain: 'Methodology', level: 'Production' },
-  { name: 'CRO & Friction Reduction', domain: 'Methodology', level: 'Advanced' },
+  { name: 'Component Variant Matrices', domain: 'Design Systems', level: 'Production' },
+  { name: 'Destructive Flow UX', domain: 'Design Systems', level: 'Production' },
+  { name: 'Accessibility & WCAG AA+', domain: 'Methodology', level: 'Production' },
+  { name: 'CRO & Checkout Telemetry', domain: 'Methodology', level: 'Advanced' },
   { name: 'Traditional Ink & Wash', domain: 'Methodology', level: 'Production' },
   { name: 'Quant Trading Logic', domain: 'Tooling', level: 'Advanced' },
 ];
@@ -176,14 +193,15 @@ export const EXPERIENCE_ITEMS: ExperienceItem[] = [
     category: 'Design Engineering',
     period: '2023 — PRESENT',
     location: 'Bangalore, India (Remote)',
-    impact: 'Architecting scalable design systems, building three-tier token pipelines in Figma and React, and engineering high-impact D2C e-commerce experiences with tactile interaction physics.',
+    impact:
+      'Owns end-to-end delivery from Figma architecture to production React 19 storefronts, lifting D2C checkout and session metrics across luxury retail and botanical brands.',
     description:
-      'Bridging Figma precision and React components. Owns the entire pipeline from typography scales and variant matrices to shipped, production-ready interfaces with zero handoff drift.',
-    metrics: ['3-Tier Token Pipeline', '100% Token Mapping', 'Zero Handoff Drift'],
+      'Bridging Figma specification and production code as a single owner—eliminating translation loss between design intent and shipped DOM.',
+    metrics: ['+34% Session Duration', '99 Lighthouse Perf', 'Zero Handoff Drift'],
     stack: ['Figma', 'React 19', 'Next.js', 'Tailwind CSS v4', 'WebAudio', 'TypeScript'],
-    previewImage:
-      'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    previewImage: sladeWilsonImage,
     certificateBadge: 'STUDIO LEAD',
+    liveUrl: '#field-notes',
   },
   {
     id: 'exp-02',
@@ -193,14 +211,15 @@ export const EXPERIENCE_ITEMS: ExperienceItem[] = [
     category: 'Design Systems',
     period: '2022 — 2023',
     location: 'Bangalore, India',
-    impact: 'Engineered the 36-variant Danger Button system, 16-variant SearchBar, and component guidelines. Built the Shift Nudge-inspired UI-Checklist web app.',
+    impact:
+      'Authored a three-tier token architecture (Primitives → Semantic → Component) and shipped the interactive 101-point UI inspection web app adopted by 1,200+ designers.',
     description:
-      'Designed and deployed an interactive evaluation engine allowing product designers to audit web interfaces against 101 visual craft criteria spanning typography, alignment, contrast, spacing, and microcopy.',
-    metrics: ['52+ Coded Variants', '1,200+ Active Designers', '16 SearchBar States'],
+      'Built synchronized Figma Token Studio pipelines and accessible React component libraries with automated visual compliance grading.',
+    metrics: ['3-Tier Token Graph', '1,200+ Active Users', '101 QA Criteria'],
     stack: ['Figma Tokens', 'React', 'Storybook', 'TypeScript', 'Tailwind CSS'],
-    previewImage:
-      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    previewImage: tokenSearchbarImage,
     certificateBadge: 'SYSTEM ARCHITECT',
+    liveUrl: '#field-notes',
   },
   {
     id: 'exp-03',
@@ -210,36 +229,83 @@ export const EXPERIENCE_ITEMS: ExperienceItem[] = [
     category: 'Creative Tech',
     period: `${CAREER_START_YEAR} — 2022`,
     location: 'Bangalore, India',
-    impact: 'Synthesized analog ink portraiture and watercolor principles into digital product design. Shipped 15+ custom web experiences and automated design book principles into Claude skills.',
+    impact:
+      'Translated analog ink portraiture, chiaroscuro value blocking, and watercolor composition into editorial web layouts across 15+ shipped client projects.',
     description:
-      'Trained in analog ink portraiture, watercolour, and manga illustration before touching a screen. Applied negative space, focal contrast, and balance principles directly to software design.',
-    metrics: ['15+ Shipped Sites', 'Analog-to-Digital', 'Bespoke Microcopy'],
+      'Trained in traditional pen-and-ink and watercolor before digital UI—applying focal contrast and negative space discipline directly to screen layout.',
+    metrics: ['15+ Shipped Sites', 'Analog-to-Digital', 'Bespoke Editorial UI'],
     stack: ['Traditional Ink', 'Watercolor', 'HTML/CSS', 'JavaScript', 'Figma'],
-    previewImage:
-      'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    previewImage: sketchNadalImage,
     certificateBadge: 'ANALOG TO DIGITAL',
   },
 ];
 
 export const FEATURED_BLOGS: BlogPost[] = [
   {
-    id: 'slade-wilson',
-    tag: 'E-COMMERCE // TIMEPIECES',
-    readTime: '6 MIN READ',
+    id: 'my-design-system',
+    tag: 'DESIGN SYSTEMS // TOKENS',
+    readTime: '8 MIN CASE STUDY',
     date: '2024',
-    title: 'Slade Wilson Watches: D2C Luxury Digital Timepiece Platform',
+    title: 'My-Design-System & Lucifer: Three-Tier Token Architecture & Variant Matrix',
     excerpt:
-      'A luxury D2C digital watch experience with bespoke editorial copy, interactive chronometer inspection, tactile haptic feedback, and a dark horology aesthetic.',
-    image:
-      'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-    accentColor: '#F5B83D',
-    metrics: '+34% Session · 99 Lighthouse',
+      'Synchronized Figma Auto-Layout and React 19 component library built on a strict Primitives → Semantic → Component token graph across 52+ interactive states.',
+    image: tokenSearchbarImage,
+    accentColor: '#10B981',
+    metrics: '52+ Coded Variants · 3 Token Tiers',
+    liveUrl: 'https://github.com/Nikhil235',
     content: [
-      'Engineered an interactive 360-degree watch dial inspector with tactile haptic WebAudio sound effects.',
-      'Editorial homepage copy focused on precision horology storytelling with fluid character-by-character headline reveals.',
-      'Optimized high-conversion checkout flow grounded in CRO principles.',
+      'Strict three-tier token pipeline: Primitives → Semantic Aliases → Component Tokens with zero hardcoded hex leakage.',
+      '16-variant SearchBar supporting live filter chips, error validation states, and keyboard shortcut listeners (⌘K / Ctrl+F).',
+      '36-variant Danger Button matrix covering destructive confirmation flows with high-contrast focus and disabled states.',
     ],
-    codeSnippet: `// WebAudio Mechanical Chronograph Click Synthesizer
+    codeSnippet: `// Three-Tier Token Mapping Spec
+export const tokens = {
+  primitive: { emerald500: '#10B981', neutral950: '#09090b' },
+  semantic: { bgSurface: 'primitive.neutral950', borderFocus: 'primitive.emerald500' },
+  component: { searchBarBg: 'semantic.bgSurface', searchBarFocusRing: 'semantic.borderFocus' },
+};`,
+  },
+  {
+    id: 'ui-checklist',
+    tag: 'DEVELOPER TOOL // QA',
+    readTime: '5 MIN CASE STUDY',
+    date: '2024',
+    title: 'UI-Checklist Tool: Shift Nudge 101-Point Visual Inspection App',
+    excerpt:
+      'Interactive quality-assurance web app deployed on Vercel that lets designers grade interfaces against 101 visual craft criteria across layout, type, and contrast.',
+    image: uiChecklistImage,
+    accentColor: '#38bdf8',
+    metrics: '1,200+ Active Designers · 101 Checks',
+    liveUrl: 'https://github.com/Nikhil235',
+    content: [
+      '101 granular UI craft criteria categorized into Typography, Layout & Grid, Color & Contrast, and Interactive Feedback.',
+      'Real-time compliance scoring with keyboard-driven rapid grading and local-storage session persistence.',
+      'Exportable JSON and markdown audit summaries for engineering handoff and design critiques.',
+    ],
+    codeSnippet: `// LocalStorage-Synced Compliance Scoring
+export function calculateCompliance(checklist: Criterion[]) {
+  const passed = checklist.filter(c => c.status === 'pass').length;
+  return Math.round((passed / checklist.length) * 100);
+}`,
+  },
+  {
+    id: 'slade-wilson',
+    tag: 'E-COMMERCE // HOROLOGY',
+    readTime: '6 MIN CASE STUDY',
+    date: '2024',
+    title: 'Slade Wilson Watches: D2C Luxury Mechanical Timepiece Platform',
+    excerpt:
+      'Dark horology storefront featuring an interactive 360° calibre dial inspector, synthesized mechanical escapement audio, and a friction-free luxury checkout flow.',
+    image: sladeWilsonImage,
+    accentColor: '#F5B83D',
+    metrics: '+34% Session Duration · 99 Lighthouse',
+    liveUrl: 'https://github.com/Nikhil235',
+    content: [
+      'Engineered an interactive watch dial inspector with zoomable sub-dials, lume toggle, and opt-in WebAudio mechanical chronograph clicks.',
+      'Editorial typography pairing high-contrast display headers with tabular technical specification readouts.',
+      'Streamlined 2-step luxury checkout flow grounded in CRO friction reduction.',
+    ],
+    codeSnippet: `// WebAudio Mechanical Chronograph Escapement Click
 const playTick = (freq = 1200) => {
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
@@ -250,104 +316,61 @@ const playTick = (freq = 1200) => {
 };`,
   },
   {
-    id: 'ui-checklist',
-    tag: 'DEVELOPER TOOL // QA',
-    readTime: '5 MIN READ',
-    date: '2024',
-    title: 'UI-Checklist Tool: Shift Nudge 101-Point Visual Inspection App',
-    excerpt:
-      'Live interactive quality-assurance web application deployed on Vercel, based on Shift Nudge’s renowned 101-point UI framework. Used by 1,200+ designers.',
-    image:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-    accentColor: '#38bdf8',
-    metrics: '1,200+ Active Designers',
-    content: [
-      '101 granular UI craft criteria categorized by Layout, Typography, Color, and Feedback.',
-      'Real-time compliance scoring with instant visual defect reports and keyboard-driven rapid grading.',
-      'Exportable audit summaries for team design critiques with instant local state persistence.',
-    ],
-    codeSnippet: `// LocalStorage-Synced Compliance Scoring
-export function calculateCompliance(checklist: Criterion[]) {
-  const passed = checklist.filter(c => c.status === 'pass').length;
-  return Math.round((passed / checklist.length) * 100);
-}`,
-  },
-  {
-    id: 'my-design-system',
-    tag: 'DESIGN SYSTEMS // TOKENS',
-    readTime: '8 MIN READ',
-    date: '2024',
-    title: 'My-Design-System & Lucifer: Three-Tier Token Architecture & Variant Matrix',
-    excerpt:
-      'Comprehensive Figma & React design system featuring a 16-variant SearchBar, 36-variant Danger button set, and food delivery app composition.',
-    image: tokenSearchbarImage,
-    accentColor: '#10B981',
-    metrics: '52+ Coded Variants // 3 Tiers',
-    content: [
-      'Strict three-tier token pipeline: Primitives → Semantic Aliases → Component Tokens.',
-      '16-variant SearchBar with live search states, filters, and keyboard shortcut listeners.',
-      '36-variant Danger Button matrix covering destructive flows with extreme visual clarity.',
-    ],
-    codeSnippet: `// Three-Tier Token Mapping Spec
-export const tokens = {
-  primitive: { neutral950: '#0d0d0d', lime400: '#b8f36b' },
-  semantic: { bgSurface: 'primitive.neutral950', textAccent: 'primitive.lime400' },
-  component: { searchBarBg: 'semantic.bgSurface', searchBarBorder: 'semantic.borderSubtle' },
-};`,
-  },
-  {
     id: 'bhringa-haircare',
     tag: 'E-COMMERCE // BOTANICALS',
-    readTime: '6 MIN READ',
+    readTime: '6 MIN CASE STUDY',
     date: '2023',
-    title: 'Bhringa Botanical Haircare: High-Sensory D2C Product Storytelling',
+    title: 'Bhringa Botanical Haircare: Apothecary D2C Formulation Storytelling',
     excerpt:
-      'Immersive shampoo and botanical hair ritual product experience with interactive ingredient exploration and high-converting microcopy.',
-    image:
-      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+      'High-converting botanical hair ritual storefront with an interactive ingredient provenance drawer and hair-porosity diagnostic matcher.',
+    image: bhringaBotanicalImage,
     accentColor: '#86efac',
-    metrics: '+42% Add-to-Cart Rate',
+    metrics: '+42% Add-to-Cart Conversion Lift',
+    liveUrl: 'https://github.com/Nikhil235',
     content: [
-      'Tactile ingredient drawer revealing organic herbs, formulation specs, and extraction methods.',
-      'Custom ritual selector matching hair profiles to bespoke herbal regiments.',
-      'Silk-smooth scroll narrative with parallax layer separation.',
+      'Interactive formulation drawer revealing cold-pressed botanical ingredients, extraction timelines, and scalp benefits.',
+      'Diagnostic ritual builder matching scalp and hair porosity profiles to tailored herbal regimens.',
+      'Sub-second page transitions with zero layout shift and accessible keyboard drawer controls.',
     ],
     codeSnippet: `// Interactive Formulation Drawer State Machine
-const [activeIngredient, setActive] = useState<Herb | null>(null);
-const { scrollYProgress } = useScroll({ target: containerRef });`,
+const [activeHerb, setActiveHerb] = useState<HerbId>('bhringraj');
+const regimen = useMemo(() => matchPorosityProfile(porosity, activeHerb), [porosity, activeHerb]);`,
   },
 ];
 
+/**
+ * Note: To replace any study with a new raw camera scan, drop the .jpg/.png/.svg
+ * into `src/assets/` and import it at the top of this file.
+ */
 export const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'gal-01',
     title: 'Rally — Nadal Mid-Roar & Dense Panel Study',
-    subtitle: 'Watercolour tennis player stacked over an ink Dragon Ball panel and a two-tone stencil.',
+    subtitle: 'Watercolour wash and India ink roar study stacked beside a manga speed-line burst and two-tone negative-space stencil.',
     issuerOrEvent: 'Analog Sketchbook Series',
     date: '2023',
     category: 'Traditional Art',
     credentialId: 'ART-SKETCH-01',
-    image:
-      'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    image: sketchNadalImage,
     span: 'md:col-span-7',
     accent: '#00F0FF',
   },
   {
     id: 'gal-02',
     title: 'Beckham / Mark III — Depth Through Contrast',
-    subtitle: 'Two ways to fake depth: pure black shapes on the left, cross-hatching and ink on the right.',
+    subtitle: 'Split value study: pure 1-bit black shadow blocking on the left half vs. 0.05mm Micron cross-hatching on the right.',
     issuerOrEvent: 'Analog Sketchbook Series',
     date: '2022',
     category: 'Traditional Art',
-    image:
-      'https://images.unsplash.com/photo-1544717305-2782549b5136?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    credentialId: 'ART-SKETCH-02',
+    image: sketchBeckhamImage,
     span: 'md:col-span-5',
     accent: '#F59E0B',
   },
   {
     id: 'gal-03',
     title: 'Three-Tier Token Architecture & 16-Variant SearchBar',
-    subtitle: 'Comprehensive Figma Auto-Layout 5.0 and React component library with Token Studio synchronization.',
+    subtitle: 'Primitive color swatches → semantic aliases → component tokens wired across all 16 interactive SearchBar states.',
     issuerOrEvent: 'Lucifer Team Design System',
     date: '2024',
     category: 'Design System',
@@ -359,26 +382,24 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'gal-04',
     title: 'S.H.A.P.E. Framework — Digital Product Methodology',
-    subtitle: 'Strategy, Hierarchy, Aesthetics, Platform, and Evolve: systematic design engineering execution.',
+    subtitle: 'Strategy, Hierarchy, Aesthetics, Platform, and Evolve: systematic execution from problem framing to Playwright CI.',
     issuerOrEvent: 'Design Engineering Methodology',
     date: '2024',
     category: 'Methodology',
     credentialId: 'SHAPE-FRAMEWORK',
-    image:
-      'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    image: shapeFrameworkImage,
     span: 'md:col-span-4',
     accent: '#EF4444',
   },
   {
     id: 'gal-05',
     title: 'Super Saiyan Trio & Naruto Split-Face Study',
-    subtitle: 'Saturated marker work beside a split-face pen portrait exploring extreme focal hierarchy.',
+    subtitle: 'Saturated alcohol-marker aura silhouettes paired with a split-face pen study exploring dual focal hierarchy.',
     issuerOrEvent: 'Analog Sketchbook Series',
     date: '2022',
     category: 'Traditional Art',
-    credentialId: 'ART-SKETCH-02',
-    image:
-      'https://images.unsplash.com/photo-1513364776144-60967b0f800f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    credentialId: 'ART-SKETCH-03',
+    image: sketchSaiyanNarutoImage,
     span: 'md:col-span-4',
     accent: '#5865F2',
   },

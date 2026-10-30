@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" fill="none">
+  <rect width="1200" height="750" fill="#09090b"/>
+
+  <!-- Grid Background -->
+  <g stroke="#27272a" stroke-width="1">
+    <line x1="100" y1="150" x2="1100" y2="150"/>
+    <line x1="100" y1="600" x2="1100" y2="600"/>
+  </g>
+
+  <text x="100" y="110" font-family="JetBrains Mono, monospace" font-size="14" fill="#EF4444" font-weight="700" letter-spacing="3">// S.H.A.P.E. DESIGN ENGINEERING METHODOLOGY</text>
+  <text x="1100" y="110" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="13" fill="#a1a1aa">SYSTEMATIC EXECUTION PIPELINE</text>
+
+  <!-- 5 Stage Pillars -->
+  <g font-family="Space Grotesk, sans-serif">
+    <!-- S -->
+    <rect x="100" y="190" width="184" height="360" rx="16" fill="#121215" stroke="#EF4444" stroke-opacity="0.6" stroke-width="2"/>
+    <text x="130" y="255" font-size="48" font-weight="700" fill="#EF4444">S</text>
+    <text x="130" y="295" font-size="20" font-weight="700" fill="#ffffff">Strategy</text>
+    <text x="130" y="330" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">User intent</text>
+    <text x="130" y="352" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">CRO metrics</text>
+    <text x="130" y="374" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Problem framing</text>
+
+    <!-- H -->
+    <rect x="304" y="190" width="184" height="360" rx="16" fill="#121215" stroke="#F59E0B" stroke-opacity="0.6" stroke-width="2"/>
+    <text x="334" y="255" font-size="48" font-weight="700" fill="#F59E0B">H</text>
+    <text x="334" y="295" font-size="20" font-weight="700" fill="#ffffff">Hierarchy</text>
+    <text x="334" y="330" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Focal contrast</text>
+    <text x="334" y="352" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Type scales</text>
+    <text x="334" y="374" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Spatial rhythm</text>
+
+    <!-- A -->
+    <rect x="508" y="190" width="184" height="360" rx="16" fill="#121215" stroke="#10B981" stroke-opacity="0.6" stroke-width="2"/>
+    <text x="538" y="255" font-size="48" font-weight="700" fill="#10B981">A</text>
+    <text x="538" y="295" font-size="20" font-weight="700" fill="#ffffff">Aesthetics</text>
+    <text x="538" y="330" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">3-Tier tokens</text>
+    <text x="538" y="352" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">101 QA criteria</text>
+    <text x="538" y="374" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Tactile motion</text>
+
+    <!-- P -->
+    <rect x="712" y="190" width="184" height="360" rx="16" fill="#121215" stroke="#00F0FF" stroke-opacity="0.6" stroke-width="2"/>
+    <text x="742" y="255" font-size="48" font-weight="700" fill="#00F0FF">P</text>
+    <text x="742" y="295" font-size="20" font-weight="700" fill="#ffffff">Platform</text>
+    <text x="742" y="330" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">React 19 + TS</text>
+    <text x="742" y="352" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Figma Auto-Layout</text>
+    <text x="742" y="374" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Zero handoff drift</text>
+
+    <!-- E -->
+    <rect x="916" y="190" width="184" height="360" rx="16" fill="#121215" stroke="#5865F2" stroke-opacity="0.6" stroke-width="2"/>
+    <text x="946" y="255" font-size="48" font-weight="700" fill="#5865F2">E</text>
+    <text x="946" y="295" font-size="20" font-weight="700" fill="#ffffff">Evolve</text>
+    <text x="946" y="330" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Playwright CI</text>
+    <text x="946" y="352" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">A11y telemetry</text>
+    <text x="946" y="374" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Iterative polish</text>
+  </g>
+
+  <text x="600" y="655" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#e4e4e7" letter-spacing="3">STRATEGY → HIERARCHY → AESTHETICS → PLATFORM → EVOLVE</text>
+</svg>

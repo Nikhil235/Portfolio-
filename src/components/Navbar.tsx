@@ -7,10 +7,13 @@ import { GithubIcon, LinkedinIcon, InstagramIcon } from './Icons';
 import { HERO_DATA } from '../data/portfolioData';
 import { playTactileClick, toggleSound, isSoundEnabled } from '../hooks/useSound';
 
-const LINKS = [
+export const NAV_LINKS = [
   { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Work', href: '#work' },
+  { label: 'Philosophy', href: '#about' },
+  { label: 'Capabilities', href: '#services' },
+  { label: 'Experience', href: '#work' },
+  { label: 'Field Notes', href: '#field-notes' },
+  { label: 'Sketchbook', href: '#gallery' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -26,7 +29,7 @@ function Clock() {
   }, []);
 
   return (
-    <span className="font-mono-tech text-sm font-semibold tabular-nums tracking-[0.15em] text-white">
+    <span className="hidden rounded-full border border-white/10 bg-zinc-950/90 px-3.5 py-1.5 font-mono-tech text-xs font-semibold tabular-nums tracking-[0.14em] text-zinc-200 backdrop-blur-xl sm:inline-block">
       {mounted && now
         ? `${now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour12: false })} IST`
         : '--:--:-- IST'}
@@ -36,7 +39,7 @@ function Clock() {
 
 export default function Navbar({ onNav }: { onNav: (href: string) => void }) {
   const [active, setActive] = useState('#home');
-  const [soundOn, setSoundOn] = useState(true);
+  const [soundOn, setSoundOn] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [focusWithin, setFocusWithin] = useState(false);
@@ -48,14 +51,47 @@ export default function Navbar({ onNav }: { onNav: (href: string) => void }) {
     setSoundOn(isSoundEnabled());
   }, []);
 
-  // Auto-hide on scroll down, reveal on scroll up. A small delta threshold
-  // avoids flicker from Lenis' sub-pixel easing at the end of a scroll.
+  // Scroll-spy: keep the active nav pill synchronized with whichever section is in view
+  useEffect(() => {
+    const computeActiveSection = () => {
+      const scrollBottom = window.scrollY + window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      if (docHeight - scrollBottom < 120) {
+        setActive('#contact');
+        return;
+      }
+
+      const triggerLine = window.innerHeight * 0.35;
+      let current = '#home';
+
+      for (const link of NAV_LINKS) {
+        const id = link.href.slice(1);
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= triggerLine) {
+          current = link.href;
+        }
+      }
+      setActive(current);
+    };
+
+    computeActiveSection();
+    window.addEventListener('scroll', computeActiveSection, { passive: true });
+    window.addEventListener('resize', computeActiveSection, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', computeActiveSection);
+      window.removeEventListener('resize', computeActiveSection);
+    };
+  }, []);
+
+  // Auto-hide on sustained scroll down, reveal on scroll up
   useMotionValueEvent(scrollY, 'change', (y) => {
     const prev = scrollY.getPrevious() ?? 0;
     const delta = y - prev;
-    setScrolled(y > 24);
-    if (y < 120) setHidden(false);
-    else if (delta > 6) setHidden(true);
+    setScrolled(y > 16);
+    if (y < 140) setHidden(false);
+    else if (delta > 10) setHidden(true);
     else if (delta < -6) setHidden(false);
   });
 
@@ -65,37 +101,43 @@ export default function Navbar({ onNav }: { onNav: (href: string) => void }) {
     <motion.header
       initial={false}
       animate={{ y: isHidden ? '-110%' : '0%' }}
-      transition={reduceMotion ? { duration: 0 } : { duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      transition={reduceMotion ? { duration: 0 } : { duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
       onFocusCapture={() => setFocusWithin(true)}
       onBlurCapture={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocusWithin(false);
       }}
-      className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 transition-[background-color,border-color,padding,backdrop-filter] duration-300 md:px-10 ${
+      className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-3 px-4 transition-[background-color,border-color,padding,box-shadow] duration-300 md:px-10 ${
         scrolled
-          ? 'border-b border-white/5 bg-neutral-950/70 py-3 backdrop-blur-md'
-          : 'border-b border-transparent bg-transparent py-5'
+          ? 'border-b border-white/10 bg-[#080808]/90 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.8)] backdrop-blur-xl'
+          : 'border-b border-white/5 bg-[#080808]/80 py-4 backdrop-blur-lg'
       }`}
     >
       <Clock />
-      <nav className="glass-pill hidden items-center gap-1 rounded-full p-1 md:flex">
-        {LINKS.map((l) => {
+
+      <nav
+        aria-label="Primary navigation"
+        className="flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-zinc-950/95 p-1 shadow-[0_4px_24px_rgba(0,0,0,0.65)] backdrop-blur-xl"
+      >
+        {NAV_LINKS.map((l) => {
           const isActive = active === l.href;
           return (
             <button
               key={l.href}
+              type="button"
+              aria-current={isActive ? 'location' : undefined}
               onClick={() => {
                 playTactileClick('thock');
                 setActive(l.href);
                 onNav(l.href);
               }}
-              className={`relative rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
-                isActive ? 'text-black' : 'text-zinc-400 hover:text-white'
+              className={`relative shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                isActive ? 'text-black font-semibold' : 'text-zinc-300 hover:text-white'
               }`}
             >
               {isActive && (
                 <motion.span
                   layoutId="active-nav-pill"
-                  transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                  transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                   className="absolute inset-0 rounded-full bg-white"
                 />
               )}
@@ -104,18 +146,24 @@ export default function Navbar({ onNav }: { onNav: (href: string) => void }) {
           );
         })}
       </nav>
-      <div className="flex items-center gap-2">
 
+      <div className="flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-zinc-950/90 p-1 backdrop-blur-xl">
         <button
+          type="button"
           onClick={() => {
             const next = toggleSound();
             setSoundOn(next);
           }}
           aria-label={soundOn ? 'Mute sound' : 'Enable sound'}
-          title={soundOn ? 'Tactile WebAudio sound ON' : 'Tactile WebAudio sound OFF'}
-          className="grid h-9 w-9 place-items-center rounded-full text-zinc-400 transition-colors hover:bg-white/5 hover:text-[#00F0FF]"
+          aria-pressed={soundOn}
+          title={soundOn ? 'Tactile WebAudio sound ON (click to mute)' : 'Sound is muted (click to enable tactile audio)'}
+          className="grid h-8 w-8 place-items-center rounded-full text-zinc-300 transition-colors hover:bg-white/10 hover:text-[#00F0FF]"
         >
-          {soundOn ? <Volume2 className="h-4 w-4 text-[#00F0FF]" /> : <VolumeX className="h-4 w-4 text-zinc-600" />}
+          {soundOn ? (
+            <Volume2 className="h-4 w-4 text-[#00F0FF]" />
+          ) : (
+            <VolumeX className="h-4 w-4 text-zinc-400" />
+          )}
         </button>
         {[
           { href: s.github, Icon: GithubIcon, label: 'GitHub' },
@@ -125,11 +173,11 @@ export default function Navbar({ onNav }: { onNav: (href: string) => void }) {
           <a
             key={label}
             href={href}
-            target="_blank"
-            rel="noreferrer"
+            target={href.startsWith('mailto:') ? undefined : '_blank'}
+            rel={href.startsWith('mailto:') ? undefined : 'noreferrer'}
             aria-label={label}
             onClick={() => playTactileClick('click')}
-            className="grid h-9 w-9 place-items-center rounded-full text-zinc-400 transition-colors hover:bg-white/5 hover:text-[#00F0FF]"
+            className="hidden h-8 w-8 place-items-center rounded-full text-zinc-300 transition-colors hover:bg-white/10 hover:text-[#00F0FF] lg:grid"
           >
             <Icon className="h-4 w-4" />
           </a>

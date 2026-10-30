@@ -1,15 +1,22 @@
 import { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
-import { Zap, Bot, ArrowDown, MapPin } from 'lucide-react';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+  useMotionValue,
+  useSpring,
+  AnimatePresence,
+} from 'framer-motion';
+import { Zap, Bot, ArrowDown, ArrowUpRight, MapPin } from 'lucide-react';
 import { HERO_DATA } from '../data/portfolioData';
-import { GithubIcon, LinkedinIcon, InstagramIcon } from './Icons';
 import { playTactileClick } from '../hooks/useSound';
 
 const line = {
-  hidden: { y: '110%' },
+  hidden: { y: '105%' },
   show: (i: number) => ({
     y: 0,
-    transition: { delay: 0.15 + i * 0.12, duration: 1, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { delay: 0.08 + i * 0.1, duration: 0.85, ease: [0.16, 1, 0.3, 1] as const },
   }),
 };
 
@@ -51,22 +58,19 @@ function ElectricZap() {
   return (
     <span className="relative inline-grid place-items-center">
       <motion.span
-        initial={{ rotate: -30, scale: 0 }}
-        animate={{ rotate: 0, scale: 1 }}
-        transition={{ delay: 1, type: 'spring', stiffness: 200 }}
-        whileHover={{ scale: 1.35, rotate: 18 }}
-        whileTap={{ scale: 0.85, rotate: -18 }}
+        whileHover={{ scale: 1.25, rotate: 14 }}
+        whileTap={{ scale: 0.9, rotate: -14 }}
         onClick={triggerSpark}
         onMouseEnter={() => {
           if (particles.length === 0) triggerSpark();
         }}
         data-cursor="hover"
-        title="Click or hover for electric spark!"
+        title="Click or hover for electric spark"
         className="inline-grid cursor-pointer select-none"
       >
         <Zap
           className="h-[0.78em] w-[0.78em] text-[#38bdf8] drop-shadow-[0_0_24px_rgba(0,240,255,.5)] transition-all duration-300 hover:drop-shadow-[0_0_42px_rgba(0,240,255,1)]"
-          strokeWidth={1.6}
+          strokeWidth={1.75}
         />
       </motion.span>
       <AnimatePresence>
@@ -97,24 +101,21 @@ function InteractiveBot() {
 
   return (
     <motion.span
-      initial={{ y: 40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 1.15, type: 'spring', stiffness: 180 }}
-      whileHover={{ scale: 1.35 }}
-      whileTap={{ scale: 0.85, rotate: 14 }}
+      whileHover={{ scale: 1.25 }}
+      whileTap={{ scale: 0.9, rotate: 12 }}
       onClick={triggerBounce}
       onMouseEnter={() => {
         if (!bouncing) triggerBounce();
       }}
       data-cursor="hover"
-      title="Click or hover the bot!"
+      title="Click or hover the bot"
       className="inline-grid cursor-pointer select-none"
     >
       <motion.span
         animate={
           bouncing
-            ? { y: [0, -24, 4, -8, 0], rotate: [0, -15, 12, -6, 0] }
-            : { y: [0, -8, 0] }
+            ? { y: [0, -20, 4, -6, 0], rotate: [0, -14, 10, -5, 0] }
+            : { y: [0, -6, 0] }
         }
         transition={
           bouncing
@@ -133,7 +134,6 @@ function InteractiveBot() {
 }
 
 export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
-  const s = HERO_DATA.socials;
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -141,7 +141,6 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
   });
   const reduce = useReducedMotion();
 
-  // Subtle interactive mouse parallax on ambient background spotlights
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const spotLeftX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-24, 24]), { stiffness: 90, damping: 20 });
@@ -156,17 +155,16 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
     mouseY.set((e.clientY - r.top) / r.height - 0.5);
   };
 
-  // Smooth whole-block exit scrub
-  const headlineY = useTransform(scrollYProgress, [0, 1], [0, -110]);
-  const headlineScale = useTransform(scrollYProgress, [0, 1], [1, 0.94]);
-  const headlineOpacity = useTransform(scrollYProgress, [0, 0.85, 1], [1, 0.35, 0]);
+  const headlineY = useTransform(scrollYProgress, [0, 1], [0, -90]);
+  const headlineScale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
+  const headlineOpacity = useTransform(scrollYProgress, [0, 0.85, 1], [1, 0.4, 0]);
 
   return (
     <section
       ref={sectionRef}
       id="home"
       onMouseMove={handleMouseMove}
-      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden pt-24 pb-16"
+      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden pt-28 pb-20"
     >
       <motion.div
         style={reduce ? undefined : { x: spotLeftX, y: spotLeftY }}
@@ -179,17 +177,29 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
       <div className="bg-noise pointer-events-none absolute inset-0 opacity-40" />
 
       <div className="relative mx-auto w-full max-w-[1400px] px-5 md:px-10">
+        {/* Top Positioning Callout */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
-          className="font-mono-tech mb-8 max-w-[220px] text-[10px] leading-relaxed tracking-[0.2em] text-zinc-400 lg:absolute lg:left-10 lg:top-4 lg:mb-0"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="font-mono-tech mb-6 flex flex-col justify-between gap-4 text-xs leading-relaxed tracking-[0.16em] text-zinc-300 md:flex-row md:items-start"
         >
-          {HERO_DATA.leftBioLines.map((l) => (
-            <div key={l}>{l}</div>
-          ))}
+          <div className="max-w-xs space-y-0.5">
+            {HERO_DATA.leftBioLines.map((l, idx) => (
+              <div key={l} className={idx === 0 ? 'font-semibold text-white' : 'text-zinc-300'}>
+                {l}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="glass-pill inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono-tech text-xs tracking-[0.15em] text-zinc-200">
+              <MapPin className="h-3.5 w-3.5 text-[#00F0FF]" /> {HERO_DATA.locationTag}
+            </span>
+          </div>
         </motion.div>
 
+        {/* Display Headline — Icons animate in sync with their line so there is never an empty gap */}
         <motion.h1
           style={
             reduce
@@ -201,7 +211,7 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
                   willChange: 'transform, opacity',
                 }
           }
-          className="font-display select-none text-center uppercase leading-[0.86] tracking-[-0.03em] text-white text-[clamp(3.2rem,12.5vw,11.5rem)]"
+          className="font-display select-none text-center uppercase leading-[0.86] tracking-[-0.03em] text-white text-[clamp(3.1rem,12vw,11.2rem)]"
         >
           <Line i={0}>FIGMA &amp; CODE</Line>
           <Line i={1}>
@@ -212,76 +222,54 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
           </Line>
         </motion.h1>
 
+        {/* Bottom Primary CTA & Role Positioning Bar */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1 }}
-          className="mt-10 flex flex-col items-start justify-between gap-8 md:flex-row md:items-end"
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="mt-10 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-7 lg:flex-row lg:items-center"
         >
-          <div className="flex flex-wrap items-center gap-2">
-            <motion.span
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => playTactileClick('click')}
-              className="glass-pill flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 font-mono-tech text-[10px] tracking-[0.2em] text-zinc-300 transition-colors hover:border-emerald-500/40"
+          <div className="flex flex-wrap items-center gap-3.5">
+            {/* Primary Action Button */}
+            <button
+              type="button"
+              onClick={() => {
+                playTactileClick('thock');
+                onNav('#field-notes');
+              }}
+              className="group inline-flex items-center gap-2.5 rounded-full bg-[#00F0FF] px-6 py-3.5 font-sans-tight text-sm font-bold tracking-tight text-black shadow-[0_0_28px_-4px_rgba(0,240,255,0.5)] transition-all hover:bg-white hover:shadow-[0_0_32px_rgba(255,255,255,0.5)]"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-                <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
+              View Case Studies
+              <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+            </button>
+
+            {/* Secondary Action folding "Open to opportunities" into a real interactive CTA button */}
+            <button
+              type="button"
+              onClick={() => {
+                playTactileClick('click');
+                onNav('#contact');
+              }}
+              className="glass-pill group inline-flex items-center gap-2.5 rounded-full px-5 py-3.5 font-mono-tech text-xs font-medium tracking-[0.12em] text-zinc-100 transition-colors hover:border-emerald-400/60 hover:bg-white/10"
+            >
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative h-2.5 w-2.5 rounded-full bg-emerald-400" />
               </span>
-              AVAILABLE FOR WORK
-            </motion.span>
-            <motion.span
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => playTactileClick('click')}
-              className="glass-pill flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 font-mono-tech text-[10px] tracking-[0.2em] text-zinc-300 transition-colors hover:border-[#00F0FF]/40"
-            >
-              <MapPin className="h-3 w-3 text-[#00F0FF]" /> {HERO_DATA.locationTag}
-            </motion.span>
+              OPEN TO OPPORTUNITIES — GET IN TOUCH
+              <ArrowUpRight className="h-3.5 w-3.5 text-emerald-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </button>
           </div>
-          <div className="font-mono-tech max-w-[240px] text-[10px] leading-relaxed tracking-[0.2em] text-zinc-400 md:text-right">
-            {HERO_DATA.rightCollabLines.map((l) => (
-              <div key={l}>{l}</div>
+
+          <div className="font-mono-tech max-w-md text-xs leading-relaxed tracking-[0.14em] text-zinc-300 lg:text-right">
+            {HERO_DATA.rightCollabLines.map((l, idx) => (
+              <div key={l} className={idx === 0 ? 'font-semibold text-emerald-400' : 'text-zinc-300'}>
+                {l}
+              </div>
             ))}
           </div>
         </motion.div>
       </div>
-
-      <div className="absolute left-5 top-1/2 hidden -translate-y-1/2 flex-col gap-4 text-zinc-500 md:flex md:left-10">
-        {[
-          { href: s.linkedin, Icon: LinkedinIcon, label: 'LinkedIn' },
-          { href: s.github, Icon: GithubIcon, label: 'GitHub' },
-          { href: s.instagram, Icon: InstagramIcon, label: 'Instagram' },
-        ].map(({ href, Icon, label }) => (
-          <motion.a
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={label}
-            whileHover={{ scale: 1.3, x: 4, color: '#00F0FF' }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => playTactileClick('click')}
-            className="transition-colors hover:text-[#00F0FF]"
-          >
-            <Icon className="h-4 w-4" />
-          </motion.a>
-        ))}
-      </div>
-
-      <motion.button
-        onClick={() => {
-          playTactileClick('thock');
-          onNav('#about');
-        }}
-        whileHover={{ scale: 1.15, y: 3 }}
-        whileTap={{ scale: 0.92 }}
-        aria-label="Scroll down"
-        className="absolute bottom-8 right-5 grid h-11 w-11 place-items-center rounded-full bg-white text-black shadow-[0_10px_25px_-5px_rgba(255,255,255,0.4)] transition-all md:right-10"
-      >
-        <ArrowDown className="h-4 w-4" />
-      </motion.button>
     </section>
   );
 }

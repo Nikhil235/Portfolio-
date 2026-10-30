@@ -1,7 +1,8 @@
 'use client';
 
 let audioCtx: AudioContext | null = null;
-let soundEnabled = true;
+// Sound is opt-in by default so visitors are never surprised by unexpected audio.
+let soundEnabled = false;
 
 export function isSoundEnabled() {
   return soundEnabled;

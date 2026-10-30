@@ -422,9 +422,9 @@ export default function BentoGrid() {
         <div className="mb-12 flex items-end justify-between gap-6">
           <MaskedLines
             className="font-display text-[clamp(2.2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
-            lines={[<>Core</>, <span className="text-zinc-600">Specializations</span>]}
+            lines={[<>Core</>, <span className="text-zinc-500">Capabilities</span>]}
           />
-          <span className="hidden font-mono-tech text-[10px] tracking-[0.3em] text-zinc-600 md:block">
+          <span className="hidden font-mono-tech text-xs tracking-[0.25em] text-zinc-400 md:block">
             02 — CAPABILITIES
           </span>
         </div>
@@ -432,22 +432,22 @@ export default function BentoGrid() {
           <TiltCard className="md:col-span-4 md:row-span-2" accent="#F5B83D">
             <div className="flex h-full flex-col gap-8 md:flex-row md:items-center">
               <div className="flex flex-1 flex-col gap-5">
-                <span className="font-mono-tech text-[10px] tracking-[0.3em] text-[#F5B83D]">
-                  // 01 — DESIGN SYSTEMS
+                <span className="font-mono-tech text-xs tracking-[0.25em] text-[#F5B83D]">
+                  // 01 — DESIGN SYSTEMS ARCHITECTURE
                 </span>
                 <h3 className="font-syne text-4xl font-extrabold leading-none md:text-5xl">
                   Three-Tier<br />Tokens
                 </h3>
                 <WordScrubHighlight
-                  text="Primitives → Semantic Aliases → Component tokens. Engineered variant matrices (16-variant SearchBar, 36-variant Danger Buttons) eliminating handoff drift."
+                  text="Primitives → Semantic Aliases → Component tokens. Single source of truth connecting Figma Variables directly to typed React 19 prop APIs."
                   accents={{
                     Primitives: '#F5B83D',
                     Semantic: '#10B981',
                     Component: '#00F0FF',
-                    matrices: '#F5B83D',
-                    drift: '#00F0FF',
+                    Variables: '#F5B83D',
+                    React: '#00F0FF',
                   }}
-                  className="max-w-sm text-sm leading-relaxed text-zinc-400"
+                  className="max-w-sm text-sm leading-relaxed text-zinc-300"
                 />
                 <Tags items={['Figma Tokens', 'Token Studio', 'Auto-Layout 5.0', 'React 19', 'Storybook', 'Tailwind v4']} />
               </div>
@@ -458,19 +458,19 @@ export default function BentoGrid() {
             <Sliders className="mb-6 h-6 w-6 text-[#00F0FF]" />
             <ShiftNudgeGauge />
             <ParallaxFade distance={20}>
-              <p className="mt-4 text-sm text-zinc-400">Shift Nudge UI craft criteria across Layout, Type, Color &amp; Feedback.</p>
+              <p className="mt-4 text-sm text-zinc-300">Automated visual inspection across Layout, Typography, Contrast &amp; Feedback states.</p>
             </ParallaxFade>
           </TiltCard>
           <TiltCard className="md:col-span-2" accent="#10B981">
             <Layers className="mb-6 h-6 w-6 text-emerald-400" />
             <TokenStackVisual />
             <ParallaxFade distance={20}>
-              <p className="mt-4 text-sm text-zinc-400">Tokenized coded variants synchronized between Figma &amp; React.</p>
+              <p className="mt-4 text-sm text-zinc-300">Multi-state interactive components synced between Figma Auto-Layout and React DOM.</p>
             </ParallaxFade>
           </TiltCard>
           <TiltCard className="md:col-span-3" accent="#00F0FF">
             <div className="flex h-full flex-col gap-6">
-              <span className="font-mono-tech text-[10px] tracking-[0.3em] text-[#00F0FF]">
+              <span className="font-mono-tech text-xs tracking-[0.25em] text-[#00F0FF]">
                 // 02 — AGENTIC WORKFLOWS
               </span>
               <h3 className="font-syne text-4xl font-extrabold leading-none">
@@ -482,10 +482,10 @@ export default function BentoGrid() {
           </TiltCard>
           <TiltCard className="md:col-span-3" accent="#5865F2">
             <div className="mb-6 flex items-center justify-between">
-              <span className="font-mono-tech text-[10px] tracking-[0.3em] text-[#8b93ff]">
+              <span className="font-mono-tech text-xs tracking-[0.25em] text-[#8b93ff]">
                 // TECH ARSENAL — {TECH_ARSENAL.length}
               </span>
-              <Terminal className="h-5 w-5 text-zinc-500" />
+              <Terminal className="h-5 w-5 text-zinc-400" />
             </div>
             <div className="flex flex-wrap gap-2">
               {TECH_ARSENAL.map((t) => (
@@ -494,10 +494,10 @@ export default function BentoGrid() {
                   whileHover={{ y: -2, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onMouseEnter={() => playTactileClick('click')}
-                  className={`cursor-pointer rounded-md border px-2.5 py-1 font-mono-tech text-[10px] transition-colors ${
+                  className={`cursor-pointer rounded-md border px-2.5 py-1 font-mono-tech text-xs transition-colors ${
                     t.level === 'Production'
                       ? 'border-zinc-700 text-zinc-200 hover:border-[#8b93ff] hover:text-white'
-                      : 'border-[#27272a] text-zinc-500 hover:border-zinc-500 hover:text-zinc-300'
+                      : 'border-[#27272a] text-zinc-400 hover:border-zinc-500 hover:text-zinc-200'
                   }`}
                 >
                   {t.name}
@@ -505,10 +505,10 @@ export default function BentoGrid() {
               ))}
             </div>
             <a
-              href="#work"
-              className="mt-6 inline-flex items-center gap-1 font-mono-tech text-[11px] text-zinc-400 hover:text-white"
+              href="#field-notes"
+              className="mt-6 inline-flex items-center gap-1 font-mono-tech text-xs text-zinc-300 hover:text-[#00F0FF]"
             >
-              See design systems in production <ArrowUpRight className="h-3 w-3" />
+              See design systems in production <ArrowUpRight className="h-3.5 w-3.5" />
             </a>
           </TiltCard>
         </div>

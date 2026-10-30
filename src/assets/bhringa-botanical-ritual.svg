@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <defs>
+    <radialGradient id="botanicalGlow" cx="45%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#0d2e1b"/>
+      <stop offset="60%" stop-color="#09110d"/>
+      <stop offset="100%" stop-color="#050706"/>
+    </radialGradient>
+    <linearGradient id="amberBottle" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2c1808"/>
+      <stop offset="35%" stop-color="#6b3c12"/>
+      <stop offset="70%" stop-color="#3a1e07"/>
+      <stop offset="100%" stop-color="#1c0e04"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#botanicalGlow)"/>
+
+  <!-- Botanical Leaf Linework Background -->
+  <g stroke="#86efac" stroke-opacity="0.14" stroke-width="1.5" fill="none">
+    <path d="M220 560 C240 410 340 290 460 220 C390 360 320 470 220 560 Z"/>
+    <path d="M220 560 C290 450 370 340 460 220"/>
+    <path d="M780 540 C750 390 660 270 550 200 C610 340 680 450 780 540 Z"/>
+  </g>
+
+  <!-- Left Editorial Product Spec -->
+  <g font-family="JetBrains Mono, monospace" fill="#a1a1aa" font-size="13" letter-spacing="2">
+    <text x="80" y="130" fill="#86efac" font-weight="700">// AYURVEDIC APOTHECARY D2C</text>
+    <text x="80" y="168" font-family="Space Grotesk, sans-serif" font-size="34" font-weight="700" fill="#ffffff" letter-spacing="-1">Bhringa Root</text>
+    <text x="80" y="206" font-family="Space Grotesk, sans-serif" font-size="34" font-weight="700" fill="#86efac" letter-spacing="-1">Elixir Ritual</text>
+    <text x="80" y="252">COLD-MACERATED ECLIPTA ALBA</text>
+    <text x="80" y="280">AMLA · BRAHMI · BLACK SESAME</text>
+    <rect x="80" y="314" width="210" height="44" rx="22" fill="#86efac" fill-opacity="0.15" stroke="#86efac" stroke-opacity="0.5"/>
+    <text x="185" y="341" text-anchor="middle" fill="#86efac" font-size="12" font-weight="700">+42% ADD-TO-CART LIFT</text>
+  </g>
+
+  <!-- Center Apothecary Amber Glass Dropper Bottle -->
+  <g>
+    <!-- Dropper Bulb & Collar -->
+    <rect x="488" y="95" width="44" height="52" rx="20" fill="#18181b" stroke="#3f3f46" stroke-width="1.5"/>
+    <rect x="476" y="142" width="68" height="28" rx="4" fill="#d4af37" stroke="#fef08a" stroke-opacity="0.4"/>
+    <!-- Neck -->
+    <path d="M484 170 L536 170 L548 215 L472 215 Z" fill="url(#amberBottle)"/>
+    <!-- Bottle Body -->
+    <rect x="430" y="215" width="160" height="350" rx="28" fill="url(#amberBottle)" stroke="#a16207" stroke-opacity="0.6" stroke-width="2"/>
+    <!-- Glass Highlight -->
+    <rect x="446" y="232" width="12" height="310" rx="6" fill="#ffffff" fill-opacity="0.12"/>
+    <!-- Minimalist Apothecary Label -->
+    <rect x="442" y="275" width="136" height="220" rx="6" fill="#f5f5f0"/>
+    <text x="510" y="312" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#3f3f46" letter-spacing="2">NO. 04 FORMULATION</text>
+    <text x="510" y="352" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="22" font-weight="700" fill="#09090b" letter-spacing="1">BHRINGA</text>
+    <text x="510" y="374" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="16" fill="#15803d">Botanical Scalp Oil</text>
+    <line x1="464" y1="394" x2="556" y2="394" stroke="#d4d4d8" stroke-width="1"/>
+    <text x="510" y="418" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#52525b">100% COLD PRESSED</text>
+    <text x="510" y="436" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#52525b">50 ML / 1.7 FL OZ</text>
+    <rect x="475" y="458" width="70" height="18" rx="9" fill="#14532d"/>
+    <text x="510" y="470" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#86efac">ACTIVE HERBS</text>
+  </g>
+
+  <!-- Right Interactive Formulation Drawer Card -->
+  <g>
+    <rect x="670" y="135" width="440" height="410" rx="20" fill="#0d1511" stroke="#86efac" stroke-opacity="0.3" stroke-width="1.5"/>
+    <text x="705" y="182" font-family="JetBrains Mono, monospace" font-size="12" fill="#86efac" letter-spacing="2">// INTERACTIVE INGREDIENT DRAWER</text>
+    
+    <!-- Ingredient 1 -->
+    <rect x="705" y="206" width="370" height="90" rx="12" fill="#132019" stroke="#86efac" stroke-opacity="0.45"/>
+    <circle cx="745" cy="251" r="20" fill="#86efac" fill-opacity="0.15"/>
+    <text x="745" y="256" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#86efac" font-weight="700">01</text>
+    <text x="782" y="242" font-family="Space Grotesk, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Bhringraj (Eclipta Alba)</text>
+    <text x="782" y="266" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Follicle activation · 14-day slow infusion</text>
+
+    <!-- Ingredient 2 -->
+    <rect x="705" y="312" width="370" height="90" rx="12" fill="#111915" stroke="#27272a"/>
+    <circle cx="745" cy="357" r="20" fill="#27272a"/>
+    <text x="745" y="362" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#a1a1aa">02</text>
+    <text x="782" y="348" font-family="Space Grotesk, sans-serif" font-size="17" font-weight="700" fill="#e4e4e7">Wild Amla Berry Extract</text>
+    <text x="782" y="372" font-family="JetBrains Mono, monospace" font-size="11" fill="#a1a1aa">Vitamin C phytonutrient tensile complex</text>
+
+    <!-- Ritual Progress -->
+    <text x="705" y="445" font-family="JetBrains Mono, monospace" font-size="11" fill="#86efac">RITUAL MATCH PROFILE: HIGH POROSITY / DRY SCALP</text>
+    <rect x="705" y="462" width="370" height="44" rx="10" fill="#86efac"/>
+    <text x="890" y="489" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="700" fill="#052e16">ADD BESPOKE RITUAL TO BAG — $48</text>
+  </g>
+</svg>

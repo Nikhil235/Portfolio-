@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#291f0c"/>
+      <stop offset="55%" stop-color="#0d0c0a"/>
+      <stop offset="100%" stop-color="#060606"/>
+    </radialGradient>
+    <linearGradient id="goldBezel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5B83D"/>
+      <stop offset="50%" stop-color="#8A5E14"/>
+      <stop offset="100%" stop-color="#F5B83D"/>
+    </linearGradient>
+    <radialGradient id="dialFace" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bgGlow)"/>
+  
+  <!-- Subtle technical horology blueprint grid -->
+  <g stroke="#F5B83D" stroke-opacity="0.08" stroke-width="1">
+    <line x1="0" y1="337.5" x2="1200" y2="337.5"/>
+    <line x1="600" y1="0" x2="600" y2="675"/>
+    <circle cx="600" cy="337.5" r="290" stroke-dasharray="4 6"/>
+    <circle cx="600" cy="337.5" r="245"/>
+  </g>
+
+  <!-- Left HUD Spec Callouts -->
+  <g font-family="JetBrains Mono, monospace" font-size="13" fill="#a1a1aa" letter-spacing="2">
+    <text x="72" y="120" fill="#F5B83D" font-weight="700">// CALIBRE SW-01 CHRONOGRAPH</text>
+    <text x="72" y="150">FREQUENCY: 28,800 VPH (4 HZ)</text>
+    <text x="72" y="176">CASE: 41MM BRUSHED TITANIUM</text>
+    <text x="72" y="202">RESERVE: 72-HOUR BARREL</text>
+    <line x1="72" y1="224" x2="345" y2="224" stroke="#F5B83D" stroke-opacity="0.4"/>
+    <circle cx="345" cy="224" r="3.5" fill="#F5B83D"/>
+
+    <text x="72" y="510" fill="#F5B83D" font-weight="700">// WEBAUDIO ESCAPEMENT</text>
+    <text x="72" y="538">ACOUSTIC TICK: 1200HZ IMPULSE</text>
+    <text x="72" y="564">LIGHTHOUSE: 99 PERFORMANCE</text>
+  </g>
+
+  <!-- Right HUD Spec Callouts -->
+  <g font-family="JetBrains Mono, monospace" font-size="13" fill="#a1a1aa" letter-spacing="2" text-anchor="end">
+    <text x="1128" y="120" fill="#F5B83D" font-weight="700">360° DIAL INSPECTOR //</text>
+    <text x="1128" y="150">SAPPHIRE ANTI-REFLECTIVE DOME</text>
+    <text x="1128" y="176">SUPER-LUMINOVA GRADE X1</text>
+    <line x1="855" y1="198" x2="1128" y2="198" stroke="#F5B83D" stroke-opacity="0.4"/>
+    <circle cx="855" cy="198" r="3.5" fill="#F5B83D"/>
+
+    <rect x="910" y="485" width="218" height="82" rx="12" fill="#121110" stroke="#F5B83D" stroke-opacity="0.35"/>
+    <text x="1106" y="518" fill="#F5B83D" font-size="11">CONVERSION LIFT</text>
+    <text x="1106" y="550" fill="#ffffff" font-size="24" font-weight="700">+34% SESSION</text>
+  </g>
+
+  <!-- Watch Lugs & Strap Silhouette -->
+  <path d="M510 55 L690 55 L710 135 L490 135 Z" fill="#141417" stroke="#3f3f46" stroke-width="1.5"/>
+  <path d="M490 540 L710 540 L690 620 L510 620 Z" fill="#141417" stroke="#3f3f46" stroke-width="1.5"/>
+  <!-- Crown & Pushers -->
+  <rect x="822" y="317" width="22" height="40" rx="4" fill="url(#goldBezel)"/>
+  <rect x="805" y="215" width="18" height="28" rx="4" transform="rotate(25 805 215)" fill="#71717a"/>
+  <rect x="815" y="430" width="18" height="28" rx="4" transform="rotate(-25 815 430)" fill="#71717a"/>
+
+  <!-- Outer Tachymeter Bezel -->
+  <circle cx="600" cy="337.5" r="224" fill="#111113" stroke="url(#goldBezel)" stroke-width="6"/>
+  <circle cx="600" cy="337.5" r="196" fill="url(#dialFace)" stroke="#F5B83D" stroke-opacity="0.4" stroke-width="1.5"/>
+
+  <!-- Hour Indices -->
+  <g stroke="#e4e4e7" stroke-linecap="round">
+    <line x1="600" y1="152" x2="600" y2="174" stroke="#F5B83D" stroke-width="4"/>
+    <line x1="600" y1="501" x2="600" y2="523" stroke-width="3"/>
+    <line x1="414" y1="337.5" x2="436" y2="337.5" stroke-width="3"/>
+    <line x1="764" y1="337.5" x2="786" y2="337.5" stroke-width="3"/>
+    <line x1="692" y1="177" x2="681" y2="196" stroke-width="2.5"/>
+    <line x1="760" y1="245" x2="741" y2="256" stroke-width="2.5"/>
+    <line x1="760" y1="430" x2="741" y2="419" stroke-width="2.5"/>
+    <line x1="692" y1="498" x2="681" y2="479" stroke-width="2.5"/>
+    <line x1="508" y1="498" x2="519" y2="479" stroke-width="2.5"/>
+    <line x1="440" y1="430" x2="459" y2="419" stroke-width="2.5"/>
+    <line x1="440" y1="245" x2="459" y2="256" stroke-width="2.5"/>
+    <line x1="508" y1="177" x2="519" y2="196" stroke-width="2.5"/>
+  </g>
+
+  <!-- Brand & Model Typography on Dial -->
+  <text x="600" y="228" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="15" font-weight="700" fill="#ffffff" letter-spacing="5">SLADE WILSON</text>
+  <text x="600" y="246" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#F5B83D" letter-spacing="3">CHRONOMETRE CERTIFIE</text>
+
+  <!-- Chronograph Sub-dials -->
+  <g fill="#0c0c0e" stroke="#3f3f46" stroke-width="1.5">
+    <circle cx="512" cy="337.5" r="46"/>
+    <circle cx="688" cy="337.5" r="46"/>
+    <circle cx="600" cy="422" r="46"/>
+  </g>
+  <!-- Sub-dial hands -->
+  <line x1="512" y1="337.5" x2="512" y2="302" stroke="#F5B83D" stroke-width="2" stroke-linecap="round"/>
+  <line x1="688" y1="337.5" x2="716" y2="320" stroke="#F5B83D" stroke-width="2" stroke-linecap="round"/>
+  <line x1="600" y1="422" x2="575" y2="442" stroke="#e4e4e7" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Main Watch Hands (10:10 Horological Framing) -->
+  <line x1="600" y1="337.5" x2="508" y2="268" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+  <line x1="600" y1="337.5" x2="718" y2="242" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <!-- Sweeping Gold Chronograph Second Hand -->
+  <line x1="575" y1="368" x2="695" y2="195" stroke="#F5B83D" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="600" cy="337.5" r="9" fill="#F5B83D"/>
+  <circle cx="600" cy="337.5" r="3.5" fill="#09090b"/>
+</svg>

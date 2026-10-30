@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" fill="none">
+  <rect width="1200" height="750" fill="#0a0a0c"/>
+
+  <!-- Split Center Axis -->
+  <line x1="600" y1="50" x2="600" y2="700" stroke="#F59E0B" stroke-width="2" stroke-dasharray="8 8"/>
+
+  <!-- Left Half: Chiaroscuro Pure Black & White Negative Space Shapes -->
+  <g>
+    <rect x="80" y="70" width="520" height="610" fill="#111114" stroke="#27272a" stroke-width="2"/>
+    <text x="115" y="118" font-family="JetBrains Mono, monospace" font-size="13" fill="#F59E0B" letter-spacing="2">01 // PURE BLACK SHADOW BLOCKING (NEGATIVE SPACE)</text>
+
+    <!-- High-contrast geometric shadow planes -->
+    <path d="M600 160 C460 160 375 245 375 375 C375 505 460 585 600 585 Z" fill="#ffffff"/>
+    <path d="M600 195 C505 195 435 265 435 375 C435 460 495 535 600 545 Z" fill="#09090b"/>
+    <!-- Stark Highlight Planes (Brow, Cheekbone, Jaw, Armor Visor) -->
+    <polygon points="465,310 585,325 585,355 480,348" fill="#ffffff"/>
+    <polygon points="455,390 565,375 585,435 485,445" fill="#F59E0B"/>
+    <polygon points="510,475 595,465 595,515 535,515" fill="#ffffff"/>
+
+    <text x="115" y="645" font-family="JetBrains Mono, monospace" font-size="12" fill="#a1a1aa">ZERO MID-TONES · 1-BIT VALUE HIERARCHY</text>
+  </g>
+
+  <!-- Right Half: Fine Cross-Hatching & Technical Pen Linework -->
+  <g>
+    <rect x="600" y="70" width="520" height="610" fill="#141418" stroke="#27272a" stroke-width="2"/>
+    <text x="1085" y="118" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="13" fill="#00F0FF" letter-spacing="2">02 // CROSS-HATCHING &amp; MICRON INK LINEWORK</text>
+
+    <!-- Outer Contour -->
+    <path d="M600 160 C740 160 825 245 825 375 C825 505 740 585 600 585" stroke="#e4e4e7" stroke-width="3"/>
+    <!-- Internal Anatomical / Mark III Plate Contours -->
+    <path d="M600 225 L765 255 L790 365 L735 495 L600 535" stroke="#00F0FF" stroke-width="2"/>
+    <polygon points="615,325 735,310 720,348 615,355" stroke="#ffffff" stroke-width="2" fill="#00F0FF" fill-opacity="0.2"/>
+
+    <!-- Dense Cross-Hatching Mesh Lines -->
+    <g stroke="#d4d4d8" stroke-width="1.2" stroke-opacity="0.75">
+      <line x1="620" y1="210" x2="740" y2="290"/>
+      <line x1="620" y1="230" x2="755" y2="320"/>
+      <line x1="620" y1="250" x2="770" y2="350"/>
+      <line x1="620" y1="270" x2="775" y2="375"/>
+      <line x1="620" y1="370" x2="770" y2="470"/>
+      <line x1="620" y1="390" x2="755" y2="485"/>
+      <line x1="620" y1="410" x2="740" y2="500"/>
+      <line x1="620" y1="430" x2="720" y2="515"/>
+      <!-- Counter-angle hatch lines -->
+      <line x1="740" y1="220" x2="625" y2="300"/>
+      <line x1="760" y1="245" x2="625" y2="335"/>
+      <line x1="765" y1="370" x2="625" y2="465"/>
+      <line x1="750" y1="400" x2="625" y2="490"/>
+      <line x1="735" y1="430" x2="625" y2="515"/>
+    </g>
+
+    <text x="1085" y="645" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="12" fill="#a1a1aa">0.05MM + 0.3MM ARCHIVAL PEN GRADATION</text>
+  </g>
+</svg>

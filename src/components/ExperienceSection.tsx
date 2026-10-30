@@ -1,204 +1,409 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
-import { ArrowUpRight, Award } from 'lucide-react';
-import { EXPERIENCE_ITEMS, FEATURED_BLOGS } from '../data/portfolioData';
-import { MaskedLines, CounterParallaxWatermark } from './ScrollText';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Code2, Sparkles } from 'lucide-react';
+import { EXPERIENCE_ITEMS, FEATURED_BLOGS, type BlogPost } from '../data/portfolioData';
+import { MaskedLines } from './ScrollText';
 import SafeImage from './SafeImage';
 import { playTactileClick } from '../hooks/useSound';
 
 function ExperienceList() {
-  const [hovered, setHovered] = useState<number | null>(null);
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const sx = useSpring(mx, { stiffness: 200, damping: 25 });
-  const sy = useSpring(my, { stiffness: 200, damping: 25 });
-  const item = hovered !== null ? EXPERIENCE_ITEMS[hovered] : null;
+  const [activeIdx, setActiveIdx] = useState<number>(0);
+  const activeItem = EXPERIENCE_ITEMS[activeIdx] ?? EXPERIENCE_ITEMS[0];
 
   return (
-    <div
-      className="relative"
-      onMouseMove={(e) => {
-        const r = e.currentTarget.getBoundingClientRect();
-        mx.set(e.clientX - r.left);
-        my.set(e.clientY - r.top);
-      }}
-      onMouseLeave={() => setHovered(null)}
-    >
-      <AnimatePresence>
-        {item && (
+    <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
+      {/* Left Column: Experience Rows with permanent description & conditional link arrow */}
+      <div className="lg:col-span-7">
+        {EXPERIENCE_ITEMS.map((e, i) => {
+          const isSelected = activeIdx === i;
+          return (
+            <div
+              key={e.id}
+              onMouseEnter={() => {
+                if (activeIdx !== i) {
+                  setActiveIdx(i);
+                  playTactileClick('click');
+                }
+              }}
+              onClick={() => {
+                setActiveIdx(i);
+                playTactileClick('thock');
+              }}
+              data-cursor="hover"
+              className={`group relative border-t border-[#27272a] px-4 py-7 transition-colors last:border-b sm:px-6 ${
+                isSelected ? 'bg-white/[0.03]' : 'hover:bg-white/[0.015]'
+              }`}
+            >
+              {/* Active left indicator bar */}
+              <span
+                className={`absolute inset-y-0 left-0 w-1 transition-opacity ${
+                  isSelected ? 'bg-[#00F0FF] opacity-100' : 'bg-zinc-700 opacity-0 group-hover:opacity-50'
+                }`}
+              />
+
+              <div className="flex flex-wrap items-center justify-between gap-2 font-mono-tech text-xs">
+                <div className="flex items-center gap-3">
+                  <span className={isSelected ? 'font-bold text-[#00F0FF]' : 'text-zinc-400'}>{e.index}</span>
+                  <span className="rounded-full border border-[#27272a] bg-zinc-900/80 px-3 py-0.5 text-[11px] tracking-[0.14em] text-zinc-300">
+                    {e.category.toUpperCase()}
+                  </span>
+                </div>
+                <span className="text-zinc-400">{e.period}</span>
+              </div>
+
+              <div className="mt-3 flex items-start justify-between gap-4">
+                <div>
+                  <h3
+                    className={`font-sans-tight text-xl font-bold tracking-tight transition-colors md:text-2xl ${
+                      isSelected ? 'text-[#00F0FF]' : 'text-white group-hover:text-[#00F0FF]'
+                    }`}
+                  >
+                    {e.role}
+                  </h3>
+                  <p className="mt-0.5 font-mono-tech text-xs text-zinc-400">
+                    {e.organization} · {e.location}
+                  </p>
+                </div>
+
+                {/* Only render the ↗ arrow when the row actually links somewhere */}
+                {e.liveUrl && (
+                  <a
+                    href={e.liveUrl}
+                    onClick={(ev) => {
+                      ev.stopPropagation();
+                      playTactileClick('thock');
+                    }}
+                    aria-label={`View case studies from ${e.role}`}
+                    title="Jump to related case studies"
+                    className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/15 bg-zinc-900 text-zinc-300 transition-all hover:border-[#00F0FF] hover:text-[#00F0FF]"
+                  >
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                )}
+              </div>
+
+              {/* Permanent visible impact summary (accessible on both desktop and touch devices) */}
+              <p className="mt-3 text-sm leading-relaxed text-zinc-300">{e.impact}</p>
+
+              {/* Permanent key metrics pills */}
+              <div className="mt-4 flex flex-wrap gap-2">
+                {e.metrics.map((m) => (
+                  <span
+                    key={m}
+                    className="rounded-md border border-white/10 bg-zinc-900/90 px-2.5 py-1 font-mono-tech text-[11px] text-zinc-300"
+                  >
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Right Column: Dedicated Beside-Row Preview Card (never covers text) */}
+      <div className="lg:sticky lg:top-28 lg:col-span-5">
+        <AnimatePresence mode="wait">
           <motion.div
-            key="preview"
-            className="pointer-events-none absolute left-0 top-0 z-20 hidden w-80 overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900 lg:block shadow-2xl"
-            style={{ x: sx, y: sy, translateX: '-50%', translateY: '-110%' }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            key={activeItem.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="glass-card overflow-hidden rounded-3xl border border-white/15"
           >
-            <SafeImage src={item.previewImage} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
-            <div className="flex items-center gap-2 p-3 font-mono-tech text-[10px] tracking-[0.2em] text-[#00F0FF]">
-              <Award className="h-3.5 w-3.5" />
-              {item.certificateBadge}
+            <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-[#27272a] bg-zinc-950">
+              <SafeImage
+                src={activeItem.previewImage}
+                alt={`${activeItem.role} preview`}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/80 px-3 py-1 font-mono-tech text-xs tracking-[0.16em] text-[#00F0FF] backdrop-blur-md">
+                <Award className="h-3.5 w-3.5" />
+                {activeItem.certificateBadge}
+              </div>
+            </div>
+
+            <div className="p-6">
+              <div className="font-mono-tech text-xs tracking-[0.15em] text-zinc-400">
+                {activeItem.index} // {activeItem.organization.toUpperCase()}
+              </div>
+              <h4 className="font-sans-tight mt-1 text-xl font-bold text-white">{activeItem.role}</h4>
+              <p className="mt-2.5 text-sm leading-relaxed text-zinc-300">{activeItem.description}</p>
+
+              <div className="mt-5 border-t border-[#27272a] pt-4">
+                <span className="font-mono-tech block text-[11px] tracking-[0.15em] text-zinc-400">
+                  PRODUCTION STACK
+                </span>
+                <div className="mt-2.5 flex flex-wrap gap-1.5">
+                  {activeItem.stack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-md border border-zinc-700/80 bg-zinc-900 px-2.5 py-1 font-mono-tech text-xs text-zinc-200"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-      {EXPERIENCE_ITEMS.map((e, i) => (
-        <div
-          key={e.id}
-          onMouseEnter={() => {
-            setHovered(i);
-            playTactileClick('click');
-          }}
-          data-cursor="hover"
-          className="group grid gap-4 border-t border-[#27272a] py-8 transition-colors last:border-b md:grid-cols-12 md:items-center"
-        >
-          <span className="font-mono-tech text-xs text-zinc-600 md:col-span-1">{e.index}</span>
-          <div className="md:col-span-6">
-            <h3 className="font-sans-tight text-2xl font-bold tracking-tight transition-all duration-500 group-hover:translate-x-3 group-hover:text-[#00F0FF] md:text-3xl">
-              {e.role}
-            </h3>
-            <p className="mt-1 text-sm text-zinc-500">{e.organization}</p>
-            <p className="mt-3 max-h-0 overflow-hidden text-sm text-zinc-400 opacity-0 transition-all duration-500 group-hover:max-h-24 group-hover:opacity-100">
-              {e.impact}
-            </p>
-          </div>
-          <span className="w-fit rounded-full border border-[#27272a] px-3 py-1 font-mono-tech text-[10px] tracking-[0.15em] text-zinc-400 md:col-span-2">
-            {e.category.toUpperCase()}
-          </span>
-          <span className="font-mono-tech text-[11px] text-zinc-500 md:col-span-2">{e.period}</span>
-          <ArrowUpRight className="hidden h-5 w-5 text-zinc-600 transition-transform group-hover:rotate-45 group-hover:text-white md:col-span-1 md:block md:justify-self-end" />
-        </div>
-      ))}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
 
-function BlogCard({ b }: { b: (typeof FEATURED_BLOGS)[0] }) {
-  const [hovered, setHovered] = useState(false);
-  const [coords, setCoords] = useState({ x: 50, y: 50 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    setCoords({
-      x: ((e.clientX - r.left) / r.width) * 100,
-      y: ((e.clientY - r.top) / r.height) * 100,
-    });
-  };
-
+function CaseStudyCard({
+  b,
+  isSelected,
+  onSelect,
+}: {
+  b: BlogPost;
+  isSelected: boolean;
+  onSelect: () => void;
+}) {
   return (
     <motion.article
       data-cursor="hover"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => {
-        setHovered(true);
-        playTactileClick('click');
+      onClick={() => {
+        playTactileClick('thock');
+        onSelect();
       }}
-      onMouseLeave={() => setHovered(false)}
-      whileHover={{ y: -8, scale: 1.015 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: 'spring', stiffness: 240, damping: 20 }}
-      className="glass-card group relative w-[82vw] shrink-0 cursor-pointer overflow-hidden rounded-3xl transition-colors duration-300 hover:border-white/20 md:w-[520px]"
+      whileHover={{ y: -4 }}
+      transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+      className={`glass-card group relative flex flex-col overflow-hidden rounded-3xl border transition-all cursor-pointer ${
+        isSelected
+          ? 'border-[#00F0FF] shadow-[0_0_32px_-8px_rgba(0,240,255,0.35)]'
+          : 'border-[#27272a] hover:border-white/25'
+      }`}
     >
-      {/* Dynamic Specular Laser 1px Perimeter Border */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-3xl p-[1px] transition-opacity duration-300"
-        style={{
-          opacity: hovered ? 1 : 0,
-          background: `radial-gradient(280px circle at ${coords.x}% ${coords.y}%, ${b.accentColor}, transparent 65%)`,
-          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          WebkitMaskComposite: 'xor',
-          maskComposite: 'exclude',
-        }}
-      />
-
-      <div className="relative aspect-[16/9] overflow-hidden">
+      <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-[#27272a] bg-zinc-950">
         <SafeImage
           src={b.image}
           accent={b.accentColor}
-          alt=""
+          alt={b.title}
           loading="lazy"
-          className="h-full w-full object-cover opacity-70 transition-transform duration-700 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <span
-          className="absolute left-4 top-4 rounded-full bg-black/70 px-3 py-1 font-mono-tech text-[10px] tracking-[0.15em] backdrop-blur border border-white/10"
+          className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/80 px-3 py-1 font-mono-tech text-xs font-semibold tracking-[0.14em] backdrop-blur-md"
           style={{ color: b.accentColor }}
         >
           {b.tag}
         </span>
       </div>
-      <div className="relative p-6">
-        <div className="mb-3 flex gap-4 font-mono-tech text-[10px] text-zinc-500">
-          <span>{b.date}</span>
-          <span>{b.readTime}</span>
+
+      <div className="flex flex-1 flex-col justify-between p-6">
+        <div>
+          <div className="mb-2.5 flex items-center justify-between font-mono-tech text-xs text-zinc-400">
+            <span>{b.date}</span>
+            <span>{b.readTime}</span>
+          </div>
+          <h3 className="font-sans-tight text-xl font-bold leading-snug tracking-tight text-white group-hover:text-[#00F0FF] transition-colors md:text-2xl">
+            {b.title}
+          </h3>
+          <p className="mt-2.5 text-sm leading-relaxed text-zinc-300">{b.excerpt}</p>
         </div>
-        <h3 className="font-sans-tight text-xl font-bold leading-tight tracking-tight group-hover:text-white transition-colors">
-          {b.title}
-        </h3>
-        <p className="mt-3 line-clamp-2 text-sm text-zinc-400">{b.excerpt}</p>
+
         <div
-          className="mt-5 flex items-center justify-between border-t border-[#27272a] pt-4 font-mono-tech text-[10px]"
+          className="mt-6 flex items-center justify-between border-t border-[#27272a] pt-4 font-mono-tech text-xs font-semibold"
           style={{ color: b.accentColor }}
         >
-          {b.metrics}
-          <ArrowUpRight className="h-4 w-4 text-zinc-500 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
+          <span>{b.metrics}</span>
+          <span className="inline-flex items-center gap-1 text-zinc-200 group-hover:text-white">
+            {isSelected ? 'Inspecting details' : 'Inspect architecture'}
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </span>
         </div>
       </div>
     </motion.article>
   );
 }
 
-function BlogRail() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-62%']);
+function FieldNotesGrid() {
+  const [selectedIdx, setSelectedIdx] = useState<number>(0);
+  const total = FEATURED_BLOGS.length;
+  const activeStudy = FEATURED_BLOGS[selectedIdx] ?? FEATURED_BLOGS[0];
+
+  const handlePrev = () => {
+    playTactileClick('click');
+    setSelectedIdx((prev) => (prev - 1 + total) % total);
+  };
+
+  const handleNext = () => {
+    playTactileClick('click');
+    setSelectedIdx((prev) => (prev + 1) % total);
+  };
 
   return (
-    <div ref={ref} className="relative h-[300vh]">
-      {/* pt keeps the pinned "Field Notes" heading clear of the fixed navbar */}
-      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden pt-20 md:pt-24">
-        {/* Multi-Plane Counter-Parallax Ghost Watermark */}
-        <CounterParallaxWatermark
-          text="FIGMA TO PRODUCTION // 3-TIER TOKENS"
-          progress={scrollYProgress}
-          range={['5%', '-30%']}
-        />
+    <section
+      id="field-notes"
+      aria-label="Field Notes and Case Studies"
+      onKeyDown={(e) => {
+        if (e.key === 'ArrowLeft') handlePrev();
+        if (e.key === 'ArrowRight') handleNext();
+      }}
+      className="border-t border-[#27272a] py-24 md:py-32"
+    >
+      <div className="mx-auto max-w-[1400px] px-5 md:px-10">
+        {/* Header + Accessible Carousel/Grid Controls + Progress Dots */}
+        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <span className="font-mono-tech mb-3 block text-xs tracking-[0.25em] text-[#00F0FF]">
+              04 — SHIPPED CASE STUDIES &amp; METRICS
+            </span>
+            <MaskedLines
+              className="font-display text-[clamp(2.2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
+              lines={[<>Field</>, <span className="text-zinc-500">Notes</span>]}
+            />
+          </div>
 
-        <div className="relative z-10 mx-auto mb-10 flex w-full max-w-[1400px] items-end justify-between px-5 md:px-10">
-          <MaskedLines
-            className="font-display text-[clamp(2.2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
-            lines={[<>Field</>, <span className="text-zinc-600">Notes</span>]}
-          />
-          <span className="font-mono-tech text-[10px] tracking-[0.3em] text-zinc-500">● SCROLL TO EXPLORE →</span>
+          {/* Keyboard-accessible Arrow Controls & Progress Dots */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2" role="tablist" aria-label="Case study selector">
+              {FEATURED_BLOGS.map((b, idx) => {
+                const active = idx === selectedIdx;
+                return (
+                  <button
+                    key={b.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    aria-label={`Select case study ${idx + 1}: ${b.title}`}
+                    onClick={() => {
+                      playTactileClick('click');
+                      setSelectedIdx(idx);
+                    }}
+                    className={`h-2.5 rounded-full transition-all ${
+                      active ? 'w-8 bg-[#00F0FF]' : 'w-2.5 bg-zinc-700 hover:bg-zinc-500'
+                    }`}
+                  />
+                );
+              })}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handlePrev}
+                aria-label="Previous case study"
+                className="glass-pill grid h-10 w-10 place-items-center rounded-full text-zinc-200 transition-colors hover:border-[#00F0FF] hover:text-[#00F0FF]"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Next case study"
+                className="glass-pill grid h-10 w-10 place-items-center rounded-full text-zinc-200 transition-colors hover:border-[#00F0FF] hover:text-[#00F0FF]"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         </div>
-        <motion.div style={{ x }} className="relative z-10 flex gap-6 pl-5 md:pl-10">
-          {FEATURED_BLOGS.map((b) => (
-            <BlogCard key={b.id} b={b} />
+
+        {/* Visible 2x2 Grid — No vertical scroll-jacking, all 4 case studies immediately scannable */}
+        <div className="grid gap-6 md:grid-cols-2">
+          {FEATURED_BLOGS.map((b, idx) => (
+            <CaseStudyCard
+              key={b.id}
+              b={b}
+              isSelected={idx === selectedIdx}
+              onSelect={() => setSelectedIdx(idx)}
+            />
           ))}
-        </motion.div>
+        </div>
+
+        {/* Active Case Study Deep-Dive Panel (Architecture Breakdown + Code Snippet) */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeStudy.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="glass-card mt-8 rounded-3xl border border-white/15 p-6 md:p-8"
+          >
+            <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+              <div className="lg:col-span-7">
+                <div className="flex flex-wrap items-center gap-3 font-mono-tech text-xs">
+                  <span
+                    className="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-semibold"
+                    style={{ color: activeStudy.accentColor }}
+                  >
+                    ACTIVE INSPECTION · 0{selectedIdx + 1} / 0{total}
+                  </span>
+                  <span className="text-zinc-300">{activeStudy.metrics}</span>
+                </div>
+
+                <h3 className="font-sans-tight mt-3 text-2xl font-bold text-white md:text-3xl">
+                  {activeStudy.title}
+                </h3>
+
+                <ul className="mt-4 space-y-2.5">
+                  {activeStudy.content.map((point) => (
+                    <li key={point} className="flex items-start gap-2.5 text-sm leading-relaxed text-zinc-200">
+                      <Sparkles
+                        className="mt-1 h-4 w-4 shrink-0"
+                        style={{ color: activeStudy.accentColor }}
+                      />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="lg:col-span-5">
+                <div className="rounded-2xl border border-zinc-800 bg-[#07090c] p-4 font-mono-tech text-xs leading-relaxed text-zinc-200">
+                  <div className="mb-2.5 flex items-center justify-between border-b border-zinc-800 pb-2 text-[11px] text-zinc-400">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Code2 className="h-3.5 w-3.5 text-[#00F0FF]" />
+                      IMPLEMENTATION SPEC
+                    </span>
+                    <span>TYPESCRIPT / REACT</span>
+                  </div>
+                  <pre className="overflow-x-auto text-[11px] leading-relaxed text-[#00F0FF]">
+                    <code>{activeStudy.codeSnippet}</code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
-    </div>
+    </section>
   );
 }
 
 export default function ExperienceSection() {
   return (
-    <section id="work">
-      <div className="mx-auto max-w-[1400px] px-5 py-24 md:px-10 md:py-32">
-        <div className="mb-12 flex items-end justify-between">
-          <MaskedLines
-            className="font-display text-[clamp(2.2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
-            lines={[<>Selected</>, <span className="text-zinc-600">Experience</span>]}
-          />
-          <span className="hidden font-mono-tech text-[10px] tracking-[0.3em] text-zinc-600 md:block">
-            03 — WORK HISTORY &amp; SYSTEMS
-          </span>
+    <>
+      <section id="work" className="py-24 md:py-32">
+        <div className="mx-auto max-w-[1400px] px-5 md:px-10">
+          <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <div>
+              <span className="font-mono-tech mb-3 block text-xs tracking-[0.25em] text-zinc-400">
+                03 — WORK HISTORY &amp; SYSTEMS
+              </span>
+              <MaskedLines
+                className="font-display text-[clamp(2.2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
+                lines={[<>Selected</>, <span className="text-zinc-500">Experience</span>]}
+              />
+            </div>
+            <p className="max-w-md text-sm leading-relaxed text-zinc-300">
+              Select or hover any role to inspect its system architecture, production stack, and shipped visual artifacts.
+            </p>
+          </div>
+          <ExperienceList />
         </div>
-        <ExperienceList />
-      </div>
-      <BlogRail />
-    </section>
+      </section>
+
+      <FieldNotesGrid />
+    </>
   );
 }

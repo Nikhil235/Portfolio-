@@ -10,35 +10,35 @@ function Counter({
   end,
   decimals,
   suffix,
+  accent,
   run,
 }: {
   start: number;
   end: number;
   decimals: number;
   suffix: string;
+  accent: string;
   run: boolean;
 }) {
   const [v, setV] = useState(start);
   useEffect(() => {
     if (!run) return;
-    const c = animate(start, end, { duration: 2.6, ease: [0.22, 1, 0.36, 1], onUpdate: setV });
+    const c = animate(start, end, { duration: 1.8, ease: [0.22, 1, 0.36, 1], onUpdate: setV });
     return () => c.stop();
   }, [run, start, end]);
 
-  const [main, ...rest] = suffix.split('/');
+  const formatted = Number(v.toFixed(decimals)).toLocaleString('en-US');
+
   return (
-    <span className="font-mono-tech text-2xl font-bold tabular-nums text-white md:text-3xl">
-      {v.toFixed(decimals)}
-      {rest.length ? (
-        <span className="text-base text-zinc-500">/{rest.join('/')}</span>
-      ) : (
-        <span className="text-lg">{main}</span>
-      )}
+    <span className="font-display text-4xl font-bold tabular-nums tracking-tight text-white sm:text-5xl md:text-6xl">
+      {formatted}
+      <span className="ml-0.5 text-2xl sm:text-3xl" style={{ color: accent }}>
+        {suffix}
+      </span>
     </span>
   );
 }
 
-// Clean whole-line colored block sweep (no split text / character splitting)
 function RevealLine({
   text,
   color,
@@ -51,11 +51,11 @@ function RevealLine({
   run: boolean;
 }) {
   return (
-    <span className="relative inline-block my-0.5">
+    <span className="relative my-0.5 inline-block">
       <motion.span
         initial={{ opacity: 0 }}
         animate={run ? { opacity: 1 } : {}}
-        transition={{ delay: delay + 0.45, duration: 0.01 }}
+        transition={{ delay: delay + 0.35, duration: 0.01 }}
       >
         {text}
       </motion.span>
@@ -65,7 +65,7 @@ function RevealLine({
         style={{ background: color, originX: 0 }}
         initial={{ scaleX: 0 }}
         animate={run ? { scaleX: [0, 1, 1, 0], originX: [0, 0, 1, 1] } : {}}
-        transition={{ delay, duration: 1, times: [0, 0.45, 0.5, 1], ease: 'easeInOut' }}
+        transition={{ delay, duration: 0.85, times: [0, 0.45, 0.5, 1], ease: 'easeInOut' }}
       />
     </span>
   );
@@ -73,36 +73,59 @@ function RevealLine({
 
 export default function StatsSection() {
   const ref = useRef<HTMLElement>(null);
-  const run = useInView(ref, { once: true, margin: '-20%' });
+  const run = useInView(ref, { once: true, margin: '-15%' });
 
   return (
-    <section ref={ref} className="relative py-28 md:py-40">
-      <div className="mx-auto flex max-w-5xl flex-col items-center px-5 text-center">
-        <span className="glass-pill mb-8 flex items-center gap-2 rounded-full px-3 py-1 font-mono-tech text-[10px] tracking-[0.2em] text-zinc-300">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> PROFESSIONAL STATISTICS
+    <section ref={ref} className="relative py-24 md:py-32">
+      <div className="mx-auto flex max-w-[1400px] flex-col items-center px-5 text-center md:px-10">
+        <span className="glass-pill mb-6 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono-tech text-xs tracking-[0.2em] text-zinc-200">
+          <span className="h-2 w-2 rounded-full bg-emerald-400" /> MEASURED IMPACT &amp; PROOF
         </span>
 
-        <h2 className="font-sans-tight text-[clamp(1.8rem,4.8vw,3.75rem)] font-bold leading-[1.08] tracking-[-0.04em]">
+        {/* Concise two-line statement so the numbers below remain the primary visual hero */}
+        <h2 className="font-sans-tight max-w-3xl text-[clamp(1.35rem,2.8vw,2.25rem)] font-bold leading-[1.2] tracking-[-0.03em] text-zinc-200">
           {STATS_LINES.map((l, i) => (
             <div key={l.text}>
-              <RevealLine text={l.text} color={l.blockColor} delay={i * 0.55} run={run} />
+              <RevealLine text={l.text} color={l.blockColor} delay={i * 0.4} run={run} />
             </div>
           ))}
         </h2>
 
-        <ParallaxFade className="w-full max-w-3xl" distance={40}>
-          <div className="glass-card mt-14 grid w-full grid-cols-2 rounded-2xl md:grid-cols-4">
-            {KEY_METRICS.map((m, i) => (
+        <ParallaxFade className="mt-12 w-full" distance={30}>
+          <div className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {KEY_METRICS.map((m) => (
               <motion.div
                 key={m.id}
-                whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+                whileHover={{ y: -4 }}
                 transition={{ duration: 0.2 }}
-                className={`flex flex-col items-center gap-2 px-4 py-6 transition-colors ${
-                  i > 0 ? 'md:border-l' : ''
-                } ${i % 2 ? 'border-l md:border-l' : ''} ${i > 1 ? 'border-t md:border-t-0' : ''} border-[#27272a]`}
+                className="glass-card flex flex-col items-start justify-between rounded-3xl border border-[#27272a] p-6 text-left transition-colors hover:border-white/25"
               >
-                <span className="font-mono-tech text-[9px] tracking-[0.2em] text-zinc-500">{m.label}</span>
-                <Counter start={m.startValue} end={m.endValue} decimals={m.decimals} suffix={m.suffix} run={run} />
+                <div className="w-full">
+                  <div className="mb-3 flex items-center justify-between">
+                    <span
+                      className="font-mono-tech text-xs font-semibold tracking-[0.16em]"
+                      style={{ color: m.accent }}
+                    >
+                      {m.label}
+                    </span>
+                    <span
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: m.accent }}
+                    />
+                  </div>
+                  <Counter
+                    start={m.startValue}
+                    end={m.endValue}
+                    decimals={m.decimals}
+                    suffix={m.suffix}
+                    accent={m.accent}
+                    run={run}
+                  />
+                </div>
+
+                <p className="mt-4 border-t border-white/10 pt-3.5 text-xs leading-relaxed text-zinc-300">
+                  {m.description}
+                </p>
               </motion.div>
             ))}
           </div>
