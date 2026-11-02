@@ -13,11 +13,15 @@
     --accent-emerald: #10b981;
   }
 
-  html {
+  html,
+  body {
     background-color: #080808;
     color: #ffffff;
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     scroll-behavior: auto;
+    overflow-x: clip;
+    max-width: 100vw;
+    -webkit-text-size-adjust: 100%;
   }
 
   html.lenis,

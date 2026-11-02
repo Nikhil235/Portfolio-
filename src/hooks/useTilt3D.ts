@@ -19,6 +19,15 @@ export function useTilt3D(maxTilt: number = 6) {
 
   const handleMouseMove = useCallback(
     (e: MouseEvent<HTMLElement>) => {
+      // Avoid heavy 3D tilt effects on mobile / touch devices or reduced-motion users
+      if (
+        typeof window !== 'undefined' &&
+        (!window.matchMedia('(pointer: fine) and (hover: hover)').matches ||
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+      ) {
+        return;
+      }
+
       const rect = e.currentTarget.getBoundingClientRect();
       const width = rect.width;
       const height = rect.height;

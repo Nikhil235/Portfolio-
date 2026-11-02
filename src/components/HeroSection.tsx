@@ -28,7 +28,7 @@ function Line({ i, children }: { i: number; children: React.ReactNode }) {
         variants={line}
         initial="hidden"
         animate="show"
-        className="flex items-center justify-center gap-[0.12em]"
+        className="flex flex-wrap items-center justify-center gap-[0.12em]"
       >
         {children}
       </motion.div>
@@ -58,14 +58,23 @@ function ElectricZap() {
   return (
     <span className="relative inline-grid place-items-center">
       <motion.span
+        role="button"
+        tabIndex={0}
+        aria-label="Trigger electric spark"
         whileHover={{ scale: 1.25, rotate: 14 }}
         whileTap={{ scale: 0.9, rotate: -14 }}
         onClick={triggerSpark}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            triggerSpark();
+          }
+        }}
         onMouseEnter={() => {
           if (particles.length === 0) triggerSpark();
         }}
         data-cursor="hover"
-        title="Click or hover for electric spark"
+        title="Click or tap for electric spark"
         className="inline-grid cursor-pointer select-none"
       >
         <Zap
@@ -101,14 +110,23 @@ function InteractiveBot() {
 
   return (
     <motion.span
+      role="button"
+      tabIndex={0}
+      aria-label="Animate robot icon"
       whileHover={{ scale: 1.25 }}
       whileTap={{ scale: 0.9, rotate: 12 }}
       onClick={triggerBounce}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          triggerBounce();
+        }
+      }}
       onMouseEnter={() => {
         if (!bouncing) triggerBounce();
       }}
       data-cursor="hover"
-      title="Click or hover the bot"
+      title="Click or tap the bot"
       className="inline-grid cursor-pointer select-none"
     >
       <motion.span
@@ -150,6 +168,7 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     if (reduce) return;
+    if (typeof window !== 'undefined' && !window.matchMedia('(pointer: fine)').matches) return;
     const r = e.currentTarget.getBoundingClientRect();
     mouseX.set((e.clientX - r.left) / r.width - 0.5);
     mouseY.set((e.clientY - r.top) / r.height - 0.5);
@@ -164,7 +183,7 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
       ref={sectionRef}
       id="home"
       onMouseMove={handleMouseMove}
-      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden pt-28 pb-20"
+      className="relative flex min-h-dvh flex-col justify-center overflow-hidden pt-24 pb-16 md:pt-28 md:pb-20"
     >
       <motion.div
         style={reduce ? undefined : { x: spotLeftX, y: spotLeftY }}
@@ -176,15 +195,15 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
       />
       <div className="bg-noise pointer-events-none absolute inset-0 opacity-40" />
 
-      <div className="relative mx-auto w-full max-w-[1400px] px-5 md:px-10">
+      <div className="relative mx-auto w-full max-w-[1400px] px-4 md:px-8 lg:px-10">
         {/* Top Positioning Callout */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="font-mono-tech mb-6 flex flex-col justify-between gap-4 text-xs leading-relaxed tracking-[0.16em] text-zinc-300 md:flex-row md:items-start"
+          className="font-mono-tech mb-6 flex flex-col justify-between gap-4 text-xs leading-relaxed tracking-[0.14em] text-zinc-300 md:flex-row md:items-start md:tracking-[0.16em]"
         >
-          <div className="max-w-xs space-y-0.5">
+          <div className="w-full max-w-xs space-y-0.5">
             {HERO_DATA.leftBioLines.map((l, idx) => (
               <div key={l} className={idx === 0 ? 'font-semibold text-white' : 'text-zinc-300'}>
                 {l}
@@ -193,13 +212,13 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="glass-pill inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono-tech text-xs tracking-[0.15em] text-zinc-200">
-              <MapPin className="h-3.5 w-3.5 text-[#00F0FF]" /> {HERO_DATA.locationTag}
+            <span className="glass-pill inline-flex min-h-[36px] items-center gap-2 rounded-full px-3.5 py-1.5 font-mono-tech text-xs tracking-[0.14em] text-zinc-200">
+              <MapPin className="h-3.5 w-3.5 shrink-0 text-[#00F0FF]" /> {HERO_DATA.locationTag}
             </span>
           </div>
         </motion.div>
 
-        {/* Display Headline — Icons animate in sync with their line so there is never an empty gap */}
+        {/* Display Headline — Fluid clamp scaled safely from 320px up to 1920px */}
         <motion.h1
           style={
             reduce
@@ -211,7 +230,7 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
                   willChange: 'transform, opacity',
                 }
           }
-          className="font-display select-none text-center uppercase leading-[0.86] tracking-[-0.03em] text-white text-[clamp(3.1rem,12vw,11.2rem)]"
+          className="font-display select-none text-center uppercase leading-[0.88] tracking-[-0.03em] text-white text-[clamp(2.2rem,11.2vw,11.2rem)] md:leading-[0.86]"
         >
           <Line i={0}>FIGMA &amp; CODE</Line>
           <Line i={1}>
@@ -227,41 +246,41 @@ export default function HeroSection({ onNav }: { onNav: (h: string) => void }) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35 }}
-          className="mt-10 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-7 lg:flex-row lg:items-center"
+          className="mt-8 flex flex-col items-stretch justify-between gap-6 border-t border-white/10 pt-6 md:mt-10 md:pt-7 lg:flex-row lg:items-center"
         >
-          <div className="flex flex-wrap items-center gap-3.5">
-            {/* Primary Action Button */}
+          <div className="flex w-full flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:w-auto">
+            {/* Primary Action Button — Full width on mobile, auto on sm+ */}
             <button
               type="button"
               onClick={() => {
                 playTactileClick('thock');
                 onNav('#field-notes');
               }}
-              className="group inline-flex items-center gap-2.5 rounded-full bg-[#00F0FF] px-6 py-3.5 font-sans-tight text-sm font-bold tracking-tight text-black shadow-[0_0_28px_-4px_rgba(0,240,255,0.5)] transition-all hover:bg-white hover:shadow-[0_0_32px_rgba(255,255,255,0.5)]"
+              className="group inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-full bg-[#00F0FF] px-6 py-3.5 font-sans-tight text-base font-bold tracking-tight text-black shadow-[0_0_28px_-4px_rgba(0,240,255,0.5)] transition-all hover:bg-white hover:shadow-[0_0_32px_rgba(255,255,255,0.5)] sm:w-auto md:text-sm"
             >
               View Case Studies
-              <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+              <ArrowDown className="h-4 w-4 shrink-0 transition-transform group-hover:translate-y-0.5" />
             </button>
 
-            {/* Secondary Action folding "Open to opportunities" into a real interactive CTA button */}
+            {/* Secondary Action — Full width on mobile, auto on sm+ */}
             <button
               type="button"
               onClick={() => {
                 playTactileClick('click');
                 onNav('#contact');
               }}
-              className="glass-pill group inline-flex items-center gap-2.5 rounded-full px-5 py-3.5 font-mono-tech text-xs font-medium tracking-[0.12em] text-zinc-100 transition-colors hover:border-emerald-400/60 hover:bg-white/10"
+              className="glass-pill group inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-full px-5 py-3.5 font-mono-tech text-xs font-medium tracking-[0.1em] text-zinc-100 transition-colors hover:border-emerald-400/60 hover:bg-white/10 sm:w-auto md:tracking-[0.12em]"
             >
-              <span className="relative flex h-2.5 w-2.5">
+              <span className="relative flex h-2.5 w-2.5 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative h-2.5 w-2.5 rounded-full bg-emerald-400" />
               </span>
-              OPEN TO OPPORTUNITIES — GET IN TOUCH
-              <ArrowUpRight className="h-3.5 w-3.5 text-emerald-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <span>OPEN TO OPPORTUNITIES — GET IN TOUCH</span>
+              <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-emerald-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </button>
           </div>
 
-          <div className="font-mono-tech max-w-md text-xs leading-relaxed tracking-[0.14em] text-zinc-300 lg:text-right">
+          <div className="font-mono-tech w-full max-w-md text-xs leading-relaxed tracking-[0.13em] text-zinc-300 lg:text-right">
             {HERO_DATA.rightCollabLines.map((l, idx) => (
               <div key={l} className={idx === 0 ? 'font-semibold text-emerald-400' : 'text-zinc-300'}>
                 {l}

@@ -29,7 +29,7 @@ function TiltCard({
       animate={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY }}
       transition={{ type: 'spring', stiffness: 260, damping: 20 }}
       style={{ transformPerspective: 1000 }}
-      className={`glass-card group relative overflow-hidden rounded-3xl p-7 transition-[border-color,box-shadow] duration-300 hover:border-white/20 ${className}`}
+      className={`@container glass-card group relative min-w-0 overflow-hidden rounded-3xl p-5 transition-[border-color,box-shadow] duration-300 hover:border-white/20 sm:p-6 md:p-7 ${className}`}
     >
       {/* Specular Radial Background Fill */}
       <div
@@ -50,7 +50,7 @@ function TiltCard({
           maskComposite: 'exclude',
         }}
       />
-      <div className="relative h-full">{children}</div>
+      <div className="relative h-full min-w-0">{children}</div>
     </motion.div>
   );
 }
@@ -63,6 +63,9 @@ function RetroRobot() {
   const [speech, setSpeech] = useState<string | null>(null);
 
   useEffect(() => {
+    // Only bind continuous mouse tracking on fine-pointer desktop devices
+    if (typeof window === 'undefined' || !window.matchMedia('(pointer: fine)').matches) return;
+
     const handleMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
@@ -84,7 +87,7 @@ function RetroRobot() {
       });
     };
 
-    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mousemove', handleMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMove);
   }, []);
 
@@ -97,9 +100,12 @@ function RetroRobot() {
   };
 
   return (
-    <div ref={containerRef} className="relative mx-auto grid h-48 w-48 place-items-center [perspective:800px]">
+    <div
+      ref={containerRef}
+      className="relative mx-auto grid h-40 w-full max-w-[11rem] place-items-center [perspective:800px] sm:h-48 sm:max-w-[12rem]"
+    >
       <div className="absolute inset-0 rounded-full bg-[#F5B83D]/20 blur-3xl transition-opacity duration-300 group-hover:bg-[#F5B83D]/40" />
-      
+
       {/* Interactive Speech Balloon */}
       <AnimatePresence>
         {speech && (
@@ -114,7 +120,9 @@ function RetroRobot() {
         )}
       </AnimatePresence>
 
-      <motion.div
+      <motion.button
+        type="button"
+        aria-label="Interactive robot: tap or click to animate"
         animate={
           wobble
             ? { y: [0, -18, 6, -6, 0], rotate: [0, -14, 12, -6, 0] }
@@ -137,7 +145,7 @@ function RetroRobot() {
         whileTap={{ scale: 0.92 }}
         onClick={handleClick}
         data-cursor="hover"
-        title="Interactive Robot: Click me or move your mouse!"
+        title="Interactive Robot: Click or tap me!"
         className="relative grid h-32 w-32 cursor-pointer place-items-center rounded-[2rem] border border-[#F5B83D]/50 bg-gradient-to-br from-[#F5B83D] to-[#b9761c] shadow-[inset_0_-10px_20px_rgba(0,0,0,.35),0_30px_60px_-20px_rgba(245,184,61,.6)] transition-shadow duration-300 hover:shadow-[inset_0_-10px_20px_rgba(0,0,0,.35),0_30px_70px_-10px_rgba(245,184,61,1)]"
       >
         {/* Antenna with pulsing diode */}
@@ -161,7 +169,7 @@ function RetroRobot() {
             <span className="h-2 w-2 rounded-full bg-[#00F0FF] shadow-[0_0_6px_#00F0FF]" />
           </motion.div>
         </div>
-      </motion.div>
+      </motion.button>
     </div>
   );
 }
@@ -172,7 +180,7 @@ const TERMINAL_COMMANDS = [
     name: 'extract',
     fullCmd: 'npx figma-mcp extract --component SearchBar',
     lines: [
-      { text: '→ parsing Figma vector tree (16 variants)...', color: 'text-zinc-500' },
+      { text: '→ parsing Figma vector tree (16 variants)...', color: 'text-zinc-400' },
       { text: '✓ 16/16 React props synced with zero drift', color: 'text-[#00F0FF]' },
       { text: '✓ code generated at src/components/SearchBar.tsx', color: 'text-emerald-400' },
     ],
@@ -182,7 +190,7 @@ const TERMINAL_COMMANDS = [
     name: 'test:tokens',
     fullCmd: 'pnpm test:tokens --tier 3',
     lines: [
-      { text: '→ validating 3-tier token hierarchy graph...', color: 'text-zinc-500' },
+      { text: '→ validating 3-tier token hierarchy graph...', color: 'text-zinc-400' },
       { text: '✓ 18 Primitives → 24 Semantics → 10 Components', color: 'text-[#F5B83D]' },
       { text: '✓ 3-tier token matrix verified 52/52 (100%)', color: 'text-emerald-400' },
     ],
@@ -192,7 +200,7 @@ const TERMINAL_COMMANDS = [
     name: 'audit:drift',
     fullCmd: 'figma-drift audit --tolerance 0px',
     lines: [
-      { text: '→ running pixel-level DOM vs Figma inspection...', color: 'text-zinc-500' },
+      { text: '→ running pixel-level DOM vs Figma inspection...', color: 'text-zinc-400' },
       { text: '✓ auto-layout flexbox matched perfectly', color: 'text-[#00F0FF]' },
       { text: '✨ 0.00px layout drift confirmed', color: 'text-emerald-400' },
     ],
@@ -229,23 +237,24 @@ function PlayableRetroTerminal() {
     <motion.div
       whileHover={{ scale: 1.015 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="relative mx-auto w-full max-w-sm"
+      className="relative mx-auto w-full max-w-sm min-w-0"
     >
       <div className="absolute inset-0 rounded-2xl bg-[#00F0FF]/10 blur-3xl transition-opacity duration-300 group-hover:bg-[#00F0FF]/30" />
-      
-      {/* Interactive Command Switcher Tabs */}
-      <div className="mb-2 flex items-center justify-between gap-1">
-        <span className="font-mono-tech text-[9px] uppercase tracking-wider text-zinc-500">RUN SCRIPT:</span>
-        <div className="flex gap-1.5">
+
+      {/* Interactive Command Switcher Tabs — 44px touch targets on mobile */}
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+        <span className="font-mono-tech text-[10px] uppercase tracking-wider text-zinc-400">RUN SCRIPT:</span>
+        <div className="flex flex-wrap gap-1.5">
           {TERMINAL_COMMANDS.map((c, i) => (
             <button
               key={c.id}
+              type="button"
               onClick={() => runCommand(i)}
               data-cursor="hover"
-              className={`rounded px-2 py-0.5 font-mono-tech text-[10px] transition-all ${
+              className={`min-h-[44px] rounded-lg px-3 py-2 font-mono-tech text-xs transition-all md:min-h-0 md:rounded md:px-2.5 md:py-1 md:text-[10px] ${
                 activeCmdIdx === i
-                  ? 'bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/50 shadow-[0_0_12px_rgba(0,240,255,0.3)]'
-                  : 'bg-zinc-800/80 text-zinc-400 border border-zinc-700/60 hover:text-white'
+                  ? 'border border-[#00F0FF]/50 bg-[#00F0FF]/20 text-[#00F0FF] shadow-[0_0_12px_rgba(0,240,255,0.3)]'
+                  : 'border border-zinc-700/60 bg-zinc-800/80 text-zinc-300 hover:text-white'
               }`}
             >
               ${c.name}
@@ -258,27 +267,29 @@ function PlayableRetroTerminal() {
         {/* Terminal Header */}
         <div className="mb-2 flex items-center justify-between px-1">
           <div className="flex gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-red-500/70" />
-            <span className="h-2 w-2 rounded-full bg-amber-500/70" />
-            <span className="h-2 w-2 rounded-full bg-emerald-500/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
           </div>
-          <span className="font-mono-tech text-[9px] text-zinc-500">figma-mcp // zsh</span>
+          <span className="font-mono-tech text-[10px] text-zinc-400">figma-mcp // zsh</span>
           <button
+            type="button"
+            aria-label="Re-run command"
             onClick={() => runCommand(activeCmdIdx)}
             title="Re-run command"
-            className="text-zinc-500 hover:text-[#00F0FF]"
+            className="grid h-9 w-9 place-items-center rounded-lg text-zinc-400 hover:bg-white/10 hover:text-[#00F0FF] md:h-6 md:w-6"
           >
-            <Play className="h-2.5 w-2.5" />
+            <Play className="h-3.5 w-3.5 md:h-3 md:w-3" />
           </button>
         </div>
 
-        {/* Screen */}
-        <div className="rounded-lg border border-zinc-950 bg-[#031314] p-3.5 font-mono-tech text-[11px] leading-relaxed text-[#00F0FF] shadow-[inset_0_0_30px_rgba(0,240,255,.15)] min-h-[148px]">
-          <div className="text-zinc-300">
+        {/* Screen — overflow-x-auto & break-words to prevent 320px horizontal overflow */}
+        <div className="min-h-[148px] overflow-x-auto rounded-lg border border-zinc-950 bg-[#031314] p-3.5 font-mono-tech text-xs leading-relaxed text-[#00F0FF] shadow-[inset_0_0_30px_rgba(0,240,255,.15)] md:text-[11px]">
+          <div className="break-words text-zinc-200">
             $ {active.fullCmd.slice(0, typedChars || active.fullCmd.length)}
-            {running && <span className="inline-block h-3 w-1.5 animate-pulse bg-[#00F0FF] align-middle ml-1" />}
+            {running && <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-[#00F0FF] align-middle" />}
           </div>
-          
+
           <div className="mt-2 space-y-1">
             {active.lines.map((line, idx) => (
               <motion.div
@@ -286,14 +297,14 @@ function PlayableRetroTerminal() {
                 initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15 + idx * 0.12 }}
-                className={line.color}
+                className={`break-words ${line.color}`}
               >
                 {line.text}
               </motion.div>
             ))}
           </div>
 
-          <div className="mt-2 text-zinc-600">
+          <div className="mt-2 text-zinc-500">
             ${' '}
             {!running && (
               <span className="inline-block h-3 w-1.5 animate-pulse bg-[#00F0FF] align-middle" />
@@ -308,16 +319,16 @@ function PlayableRetroTerminal() {
 
 function ShiftNudgeGauge() {
   return (
-    <div className="relative flex items-center justify-between">
+    <div className="relative flex items-center justify-between gap-3">
       <div>
         <p className="font-mono-tech text-4xl font-bold text-white">
-          101<span className="text-lg text-zinc-500">pts</span>
+          101<span className="text-lg text-zinc-400">pts</span>
         </p>
-        <p className="font-mono-tech text-[10px] tracking-[0.2em] text-[#00F0FF] mt-1 flex items-center gap-1.5">
-          <CheckCircle2 className="h-3 w-3 text-[#00F0FF]" /> MAX CRITERIA
+        <p className="mt-1 flex items-center gap-1.5 font-mono-tech text-xs tracking-[0.16em] text-[#00F0FF]">
+          <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#00F0FF]" /> MAX CRITERIA
         </p>
       </div>
-      <div className="relative h-16 w-16">
+      <div className="relative h-16 w-16 shrink-0">
         <svg className="h-full w-full -rotate-90" viewBox="0 0 64 64">
           <circle
             cx="32"
@@ -354,45 +365,60 @@ function TokenStackVisual() {
   const [hovered, setHovered] = useState(false);
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-expanded={hovered}
+      aria-label="Inspect 3-tier token stack layers"
+      onClick={() => {
+        playTactileClick('click');
+        setHovered((prev) => !prev);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          playTactileClick('click');
+          setHovered((prev) => !prev);
+        }
+      }}
       onMouseEnter={() => {
         playTactileClick('click');
         setHovered(true);
       }}
       onMouseLeave={() => setHovered(false)}
-      className="relative flex items-center justify-between cursor-pointer"
+      className="relative flex cursor-pointer items-center justify-between gap-3 rounded-xl py-1"
     >
       <div>
         <p className="font-mono-tech text-4xl font-bold text-white">
-          52+<span className="text-lg text-zinc-500">vars</span>
+          52+<span className="text-lg text-zinc-400">vars</span>
         </p>
-        <p className="font-mono-tech text-[10px] tracking-[0.2em] text-emerald-400 mt-1">
+        <p className="mt-1 font-mono-tech text-xs tracking-[0.16em] text-emerald-400">
           3-TIER MATRIX // SYNCED
         </p>
       </div>
-      <div className="relative h-14 w-20 [perspective:600px]">
+      <div className="relative h-14 w-24 shrink-0 [perspective:600px]">
         {/* Layer 3: Component */}
         <motion.div
           animate={hovered ? { y: -16, rotateX: 20, scale: 1.05 } : { y: 0, rotateX: 25 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          className="absolute inset-x-0 top-0 h-7 rounded-lg border border-[#00F0FF]/50 bg-[#00F0FF]/20 backdrop-blur-sm grid place-items-center shadow-lg"
+          className=" absolute inset-x-0 top-0 grid h-7 place-items-center rounded-lg border border-[#00F0FF]/50 bg-[#00F0FF]/20 shadow-lg backdrop-blur-sm"
         >
-          <span className="font-mono-tech text-[8px] tracking-wider text-[#00F0FF]">COMPONENTS</span>
+          <span className="font-mono-tech text-[9px] tracking-wider text-[#00F0FF]">COMPONENTS</span>
         </motion.div>
         {/* Layer 2: Semantic */}
         <motion.div
           animate={hovered ? { y: 0, rotateX: 20 } : { y: 6, rotateX: 25 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          className="absolute inset-x-0 top-0 h-7 rounded-lg border border-emerald-400/50 bg-emerald-400/20 backdrop-blur-sm grid place-items-center shadow-md"
+          className="absolute inset-x-0 top-0 grid h-7 place-items-center rounded-lg border border-emerald-400/50 bg-emerald-400/20 shadow-md backdrop-blur-sm"
         >
-          <span className="font-mono-tech text-[8px] tracking-wider text-emerald-400">SEMANTIC</span>
+          <span className="font-mono-tech text-[9px] tracking-wider text-emerald-400">SEMANTIC</span>
         </motion.div>
         {/* Layer 1: Primitives */}
         <motion.div
           animate={hovered ? { y: 16, rotateX: 20, scale: 0.95 } : { y: 12, rotateX: 25 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          className="absolute inset-x-0 top-0 h-7 rounded-lg border border-[#F5B83D]/50 bg-[#F5B83D]/20 backdrop-blur-sm grid place-items-center shadow-sm"
+          className="absolute inset-x-0 top-0 grid h-7 place-items-center rounded-lg border border-[#F5B83D]/50 bg-[#F5B83D]/20 shadow-sm backdrop-blur-sm"
         >
-          <span className="font-mono-tech text-[8px] tracking-wider text-[#F5B83D]">PRIMITIVES</span>
+          <span className="font-mono-tech text-[9px] tracking-wider text-[#F5B83D]">PRIMITIVES</span>
         </motion.div>
       </div>
     </div>
@@ -407,7 +433,7 @@ const Tags = ({ items }: { items: string[] }) => (
         whileHover={{ y: -2, scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onMouseEnter={() => playTactileClick('click')}
-        className="cursor-pointer rounded-full border border-[#27272a] px-3 py-1 font-mono-tech text-[10px] text-zinc-400 transition-colors hover:border-[#00F0FF]/60 hover:text-white"
+        className="cursor-pointer rounded-full border border-[#27272a] px-3 py-1.5 font-mono-tech text-xs text-zinc-300 transition-colors hover:border-[#00F0FF]/60 hover:text-white md:py-1 md:text-[10px]"
       >
         {t}
       </motion.span>
@@ -417,25 +443,26 @@ const Tags = ({ items }: { items: string[] }) => (
 
 export default function BentoGrid() {
   return (
-    <section id="services" className="py-24 md:py-32">
-      <div className="mx-auto max-w-[1400px] px-5 md:px-10">
-        <div className="mb-12 flex items-end justify-between gap-6">
+    <section id="services" className="py-20 md:py-32">
+      <div className="mx-auto w-full max-w-[1400px] px-4 md:px-8 lg:px-10">
+        <div className="mb-10 flex flex-col items-start justify-between gap-4 md:mb-12 md:flex-row md:items-end">
           <MaskedLines
-            className="font-display text-[clamp(2.2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
+            className="font-display text-[clamp(2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
             lines={[<>Core</>, <span className="text-zinc-500">Capabilities</span>]}
           />
-          <span className="hidden font-mono-tech text-xs tracking-[0.25em] text-zinc-400 md:block">
+          <span className="font-mono-tech text-xs tracking-[0.25em] text-zinc-400">
             02 — CAPABILITIES
           </span>
         </div>
-        <div className="grid gap-4 md:grid-cols-6 [perspective:1200px]">
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-6 [perspective:1200px]">
           <TiltCard className="md:col-span-4 md:row-span-2" accent="#F5B83D">
-            <div className="flex h-full flex-col gap-8 md:flex-row md:items-center">
+            <div className="flex h-full flex-col gap-6 md:flex-row md:items-center md:gap-8">
               <div className="flex flex-1 flex-col gap-5">
-                <span className="font-mono-tech text-xs tracking-[0.25em] text-[#F5B83D]">
+                <span className="font-mono-tech text-xs tracking-[0.2em] text-[#F5B83D] md:tracking-[0.25em]">
                   // 01 — DESIGN SYSTEMS ARCHITECTURE
                 </span>
-                <h3 className="font-syne text-4xl font-extrabold leading-none md:text-5xl">
+                <h3 className="font-syne text-3xl font-extrabold leading-none sm:text-4xl md:text-5xl">
                   Three-Tier<br />Tokens
                 </h3>
                 <WordScrubHighlight
@@ -447,42 +474,50 @@ export default function BentoGrid() {
                     Variables: '#F5B83D',
                     React: '#00F0FF',
                   }}
-                  className="max-w-sm text-sm leading-relaxed text-zinc-300"
+                  className="max-w-sm text-base leading-relaxed text-zinc-300 md:text-sm"
                 />
                 <Tags items={['Figma Tokens', 'Token Studio', 'Auto-Layout 5.0', 'React 19', 'Storybook', 'Tailwind v4']} />
               </div>
               <RetroRobot />
             </div>
           </TiltCard>
+
           <TiltCard className="md:col-span-2" accent="#00F0FF">
-            <Sliders className="mb-6 h-6 w-6 text-[#00F0FF]" />
+            <Sliders className="mb-5 h-6 w-6 text-[#00F0FF]" />
             <ShiftNudgeGauge />
             <ParallaxFade distance={20}>
-              <p className="mt-4 text-sm text-zinc-300">Automated visual inspection across Layout, Typography, Contrast &amp; Feedback states.</p>
+              <p className="mt-4 text-base leading-relaxed text-zinc-300 md:text-sm">
+                Automated visual inspection across Layout, Typography, Contrast &amp; Feedback states.
+              </p>
             </ParallaxFade>
           </TiltCard>
+
           <TiltCard className="md:col-span-2" accent="#10B981">
-            <Layers className="mb-6 h-6 w-6 text-emerald-400" />
+            <Layers className="mb-5 h-6 w-6 text-emerald-400" />
             <TokenStackVisual />
             <ParallaxFade distance={20}>
-              <p className="mt-4 text-sm text-zinc-300">Multi-state interactive components synced between Figma Auto-Layout and React DOM.</p>
+              <p className="mt-4 text-base leading-relaxed text-zinc-300 md:text-sm">
+                Multi-state interactive components synced between Figma Auto-Layout and React DOM.
+              </p>
             </ParallaxFade>
           </TiltCard>
+
           <TiltCard className="md:col-span-3" accent="#00F0FF">
-            <div className="flex h-full flex-col gap-6">
-              <span className="font-mono-tech text-xs tracking-[0.25em] text-[#00F0FF]">
+            <div className="flex h-full flex-col gap-5 md:gap-6">
+              <span className="font-mono-tech text-xs tracking-[0.2em] text-[#00F0FF] md:tracking-[0.25em]">
                 // 02 — AGENTIC WORKFLOWS
               </span>
-              <h3 className="font-syne text-4xl font-extrabold leading-none">
+              <h3 className="font-syne text-3xl font-extrabold leading-none sm:text-4xl">
                 Claude Code<br />+ Figma MCP
               </h3>
               <PlayableRetroTerminal />
               <Tags items={['Claude Code', 'Figma MCP', 'Antigravity IDE', 'Design Systems', 'Microcopy']} />
             </div>
           </TiltCard>
+
           <TiltCard className="md:col-span-3" accent="#5865F2">
-            <div className="mb-6 flex items-center justify-between">
-              <span className="font-mono-tech text-xs tracking-[0.25em] text-[#8b93ff]">
+            <div className="mb-5 flex items-center justify-between">
+              <span className="font-mono-tech text-xs tracking-[0.2em] text-[#8b93ff] md:tracking-[0.25em]">
                 // TECH ARSENAL — {TECH_ARSENAL.length}
               </span>
               <Terminal className="h-5 w-5 text-zinc-400" />
@@ -494,7 +529,7 @@ export default function BentoGrid() {
                   whileHover={{ y: -2, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onMouseEnter={() => playTactileClick('click')}
-                  className={`cursor-pointer rounded-md border px-2.5 py-1 font-mono-tech text-xs transition-colors ${
+                  className={`cursor-pointer rounded-md border px-2.5 py-1.5 font-mono-tech text-xs transition-colors md:py-1 ${
                     t.level === 'Production'
                       ? 'border-zinc-700 text-zinc-200 hover:border-[#8b93ff] hover:text-white'
                       : 'border-[#27272a] text-zinc-400 hover:border-zinc-500 hover:text-zinc-200'
@@ -506,7 +541,7 @@ export default function BentoGrid() {
             </div>
             <a
               href="#field-notes"
-              className="mt-6 inline-flex items-center gap-1 font-mono-tech text-xs text-zinc-300 hover:text-[#00F0FF]"
+              className="mt-5 inline-flex min-h-[44px] items-center gap-1 font-mono-tech text-xs text-zinc-300 hover:text-[#00F0FF]"
             >
               See design systems in production <ArrowUpRight className="h-3.5 w-3.5" />
             </a>
@@ -516,4 +551,3 @@ export default function BentoGrid() {
     </section>
   );
 }
-

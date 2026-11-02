@@ -21,7 +21,7 @@ export default function App() {
   const done = useCallback(() => setLoading(false), []);
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white">
+    <div className="min-h-dvh overflow-x-clip bg-[#080808] text-white">
       <CustomCursor />
       <AnimatePresence>{loading && <Preloader onDone={done} />}</AnimatePresence>
       <Navbar onNav={scrollTo} />

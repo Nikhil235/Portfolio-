@@ -6,11 +6,11 @@ import { HERO_DATA } from '../data/portfolioData';
 
 export default function PhilosophySection() {
   return (
-    <section id="about" className="relative border-y border-[#27272a] py-24 md:py-32">
+    <section id="about" className="relative border-y border-[#27272a] py-20 md:py-32">
       <span className="absolute -top-1 left-0 h-2 w-2 bg-[#27272a]" />
       <span className="absolute -top-1 right-0 h-2 w-2 bg-[#27272a]" />
-      <div className="mx-auto max-w-[1400px] px-5 md:px-10">
-        <div className="mb-10 flex items-center justify-between font-mono-tech text-xs tracking-[0.25em]">
+      <div className="mx-auto w-full max-w-[1400px] px-4 md:px-8 lg:px-10">
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-2 font-mono-tech text-xs tracking-[0.2em] md:mb-10 md:tracking-[0.25em]">
           <span className="text-rose-400">// DESIGN PHILOSOPHY</span>
           <span className="text-zinc-400">01 — PHILOSOPHY</span>
         </div>
@@ -25,10 +25,10 @@ export default function PhilosophySection() {
             drift: '#00F0FF',
           }}
           italics={['and', 'zero', 'drift']}
-          className="font-sans-tight text-[clamp(2.4rem,6.4vw,6rem)] font-bold leading-[0.98] tracking-[-0.04em]"
+          className="font-sans-tight text-[clamp(1.95rem,6.4vw,6rem)] font-bold leading-[1.02] tracking-[-0.04em] md:leading-[0.98]"
         />
 
-        <div className="mt-16 grid gap-10 border-t border-[#27272a] pt-10 md:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-8 border-t border-[#27272a] pt-10 md:mt-16 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
           {[
             {
               h: 'SINGLE-OWNER EXECUTION',
@@ -49,13 +49,13 @@ export default function PhilosophySection() {
               h: 'TACTILE CRAFT & ANALOG ORIGINS',
               body: (
                 <>
-                  <p className="text-sm leading-relaxed text-zinc-300">
+                  <p className="text-base leading-relaxed text-zinc-300 md:text-sm">
                     I trained in ink portraiture, watercolour, and manga illustration before touching a screen. That is
                     where my eye for visual hierarchy, negative space, and micro-contrast comes from.
                   </p>
                   <a
                     href="#field-notes"
-                    className="mt-4 inline-block font-mono-tech text-xs font-medium text-rose-400 transition-colors hover:text-[#00F0FF]"
+                    className="mt-3 inline-flex min-h-[44px] items-center font-mono-tech text-xs font-medium text-rose-400 transition-colors hover:text-[#00F0FF]"
                   >
                     Explore shipped case studies →
                   </a>
@@ -66,7 +66,7 @@ export default function PhilosophySection() {
               h: 'SYSTEMS & QUANT DISCIPLINE',
               body: (
                 <>
-                  <p className="text-sm leading-relaxed text-zinc-300">
+                  <p className="text-base leading-relaxed text-zinc-300 md:text-sm">
                     On the side I build{' '}
                     <a
                       id="quant-models-link"
@@ -85,12 +85,12 @@ export default function PhilosophySection() {
                     href={HERO_DATA.quantProject.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="group mt-4 inline-flex items-center gap-1 font-mono-tech text-xs font-medium text-[#00F0FF] hover:text-white"
+                    className="group mt-3 inline-flex min-h-[44px] items-center gap-1 font-mono-tech text-xs font-medium text-[#00F0FF] hover:text-white"
                   >
                     View repositories
                     <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </a>
-                  <p className="font-signature mt-4 text-4xl text-white">{HERO_DATA.shortSignature}</p>
+                  <p className="font-signature mt-2 text-4xl text-white">{HERO_DATA.shortSignature}</p>
                 </>
               ),
             },

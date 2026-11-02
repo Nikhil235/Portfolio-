@@ -76,14 +76,14 @@ export default function StatsSection() {
   const run = useInView(ref, { once: true, margin: '-15%' });
 
   return (
-    <section ref={ref} className="relative py-24 md:py-32">
-      <div className="mx-auto flex max-w-[1400px] flex-col items-center px-5 text-center md:px-10">
-        <span className="glass-pill mb-6 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono-tech text-xs tracking-[0.2em] text-zinc-200">
-          <span className="h-2 w-2 rounded-full bg-emerald-400" /> MEASURED IMPACT &amp; PROOF
+    <section ref={ref} className="relative py-20 md:py-32">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center px-4 text-center md:px-8 lg:px-10">
+        <span className="glass-pill mb-6 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono-tech text-xs tracking-[0.16em] text-zinc-200 md:tracking-[0.2em]">
+          <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" /> MEASURED IMPACT &amp; PROOF
         </span>
 
         {/* Concise two-line statement so the numbers below remain the primary visual hero */}
-        <h2 className="font-sans-tight max-w-3xl text-[clamp(1.35rem,2.8vw,2.25rem)] font-bold leading-[1.2] tracking-[-0.03em] text-zinc-200">
+        <h2 className="font-sans-tight max-w-3xl text-[clamp(1.25rem,2.8vw,2.25rem)] font-bold leading-[1.22] tracking-[-0.03em] text-zinc-200">
           {STATS_LINES.map((l, i) => (
             <div key={l.text}>
               <RevealLine text={l.text} color={l.blockColor} delay={i * 0.4} run={run} />
@@ -91,25 +91,25 @@ export default function StatsSection() {
           ))}
         </h2>
 
-        <ParallaxFade className="mt-12 w-full" distance={30}>
-          <div className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ParallaxFade className="mt-10 w-full md:mt-12" distance={30}>
+          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {KEY_METRICS.map((m) => (
               <motion.div
                 key={m.id}
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.2 }}
-                className="glass-card flex flex-col items-start justify-between rounded-3xl border border-[#27272a] p-6 text-left transition-colors hover:border-white/25"
+                className="@container glass-card flex flex-col items-start justify-between rounded-3xl border border-[#27272a] p-5 text-left transition-colors hover:border-white/25 md:p-6"
               >
                 <div className="w-full">
                   <div className="mb-3 flex items-center justify-between">
                     <span
-                      className="font-mono-tech text-xs font-semibold tracking-[0.16em]"
+                      className="font-mono-tech text-xs font-semibold tracking-[0.14em]"
                       style={{ color: m.accent }}
                     >
                       {m.label}
                     </span>
                     <span
-                      className="h-2 w-2 rounded-full"
+                      className="h-2 w-2 shrink-0 rounded-full"
                       style={{ backgroundColor: m.accent }}
                     />
                   </div>
@@ -123,7 +123,7 @@ export default function StatsSection() {
                   />
                 </div>
 
-                <p className="mt-4 border-t border-white/10 pt-3.5 text-xs leading-relaxed text-zinc-300">
+                <p className="mt-4 border-t border-white/10 pt-3.5 text-base leading-relaxed text-zinc-300 md:text-xs">
                   {m.description}
                 </p>
               </motion.div>

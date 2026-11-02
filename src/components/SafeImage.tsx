@@ -6,11 +6,19 @@ type SafeImageProps = ImgHTMLAttributes<HTMLImageElement> & {
 };
 
 /**
- * <img> that never shows the browser's broken-image glyph. If the source 404s
- * (e.g. a remote CDN asset is removed) it swaps to a tinted gradient panel
- * occupying the same box, so the card layout and overlays stay intact.
+ * Responsive <img> component with explicit intrinsic dimensions (width/height),
+ * responsive sizes hint, async decoding, and fallback panel to prevent CLS.
  */
-export default function SafeImage({ accent = '#00F0FF', className = '', alt = '', onError, ...rest }: SafeImageProps) {
+export default function SafeImage({
+  accent = '#00F0FF',
+  className = '',
+  alt = '',
+  width = 1200,
+  height = 675,
+  sizes = '(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 640px',
+  onError,
+  ...rest
+}: SafeImageProps) {
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -19,7 +27,7 @@ export default function SafeImage({ accent = '#00F0FF', className = '', alt = ''
         role={alt ? 'img' : undefined}
         aria-label={alt || undefined}
         aria-hidden={alt ? undefined : true}
-        className={`${className} bg-noise`}
+        className={`w-full ${className} bg-noise`}
         style={{
           backgroundColor: '#0e0e11',
           backgroundImage: `radial-gradient(120% 90% at 20% 0%, ${accent}33 0%, transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 0)`,
@@ -32,8 +40,11 @@ export default function SafeImage({ accent = '#00F0FF', className = '', alt = ''
   return (
     <img
       {...rest}
+      width={width}
+      height={height}
+      sizes={sizes}
       alt={alt}
-      className={className}
+      className={`max-w-full ${className}`}
       decoding="async"
       onError={(e) => {
         setFailed(true);

@@ -13,14 +13,17 @@ function ExperienceList() {
   const activeItem = EXPERIENCE_ITEMS[activeIdx] ?? EXPERIENCE_ITEMS[0];
 
   return (
-    <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
+    <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10">
       {/* Left Column: Experience Rows with permanent description & conditional link arrow */}
-      <div className="lg:col-span-7">
+      <div className="min-w-0 lg:col-span-7">
         {EXPERIENCE_ITEMS.map((e, i) => {
           const isSelected = activeIdx === i;
           return (
             <div
               key={e.id}
+              role="button"
+              tabIndex={0}
+              aria-pressed={isSelected}
               onMouseEnter={() => {
                 if (activeIdx !== i) {
                   setActiveIdx(i);
@@ -31,8 +34,15 @@ function ExperienceList() {
                 setActiveIdx(i);
                 playTactileClick('thock');
               }}
+              onKeyDown={(ev) => {
+                if (ev.key === 'Enter' || ev.key === ' ') {
+                  ev.preventDefault();
+                  setActiveIdx(i);
+                  playTactileClick('thock');
+                }
+              }}
               data-cursor="hover"
-              className={`group relative border-t border-[#27272a] px-4 py-7 transition-colors last:border-b sm:px-6 ${
+              className={`group relative cursor-pointer border-t border-[#27272a] px-4 py-6 transition-colors last:border-b sm:px-6 md:py-7 ${
                 isSelected ? 'bg-white/[0.03]' : 'hover:bg-white/[0.015]'
               }`}
             >
@@ -53,8 +63,8 @@ function ExperienceList() {
                 <span className="text-zinc-400">{e.period}</span>
               </div>
 
-              <div className="mt-3 flex items-start justify-between gap-4">
-                <div>
+              <div className="mt-3 flex items-start justify-between gap-3">
+                <div className="min-w-0">
                   <h3
                     className={`font-sans-tight text-xl font-bold tracking-tight transition-colors md:text-2xl ${
                       isSelected ? 'text-[#00F0FF]' : 'text-white group-hover:text-[#00F0FF]'
@@ -67,7 +77,7 @@ function ExperienceList() {
                   </p>
                 </div>
 
-                {/* Only render the ↗ arrow when the row actually links somewhere */}
+                {/* Only render the ↗ arrow when the row actually links somewhere — 44x44px tap target */}
                 {e.liveUrl && (
                   <a
                     href={e.liveUrl}
@@ -77,22 +87,22 @@ function ExperienceList() {
                     }}
                     aria-label={`View case studies from ${e.role}`}
                     title="Jump to related case studies"
-                    className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/15 bg-zinc-900 text-zinc-300 transition-all hover:border-[#00F0FF] hover:text-[#00F0FF]"
+                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/15 bg-zinc-900 text-zinc-300 transition-all hover:border-[#00F0FF] hover:text-[#00F0FF] md:h-9 md:w-9"
                   >
                     <ArrowUpRight className="h-4 w-4" />
                   </a>
                 )}
               </div>
 
-              {/* Permanent visible impact summary (accessible on both desktop and touch devices) */}
-              <p className="mt-3 text-sm leading-relaxed text-zinc-300">{e.impact}</p>
+              {/* Permanent visible impact summary (16px on mobile, 14px on md+) */}
+              <p className="mt-3 text-base leading-relaxed text-zinc-300 md:text-sm">{e.impact}</p>
 
               {/* Permanent key metrics pills */}
               <div className="mt-4 flex flex-wrap gap-2">
                 {e.metrics.map((m) => (
                   <span
                     key={m}
-                    className="rounded-md border border-white/10 bg-zinc-900/90 px-2.5 py-1 font-mono-tech text-[11px] text-zinc-300"
+                    className="rounded-md border border-white/10 bg-zinc-900/90 px-2.5 py-1 font-mono-tech text-xs text-zinc-300 md:text-[11px]"
                   >
                     {m}
                   </span>
@@ -104,7 +114,7 @@ function ExperienceList() {
       </div>
 
       {/* Right Column: Dedicated Beside-Row Preview Card (never covers text) */}
-      <div className="lg:sticky lg:top-28 lg:col-span-5">
+      <div className="min-w-0 lg:sticky lg:top-28 lg:col-span-5">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeItem.id}
@@ -112,7 +122,7 @@ function ExperienceList() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25 }}
-            className="glass-card overflow-hidden rounded-3xl border border-white/15"
+            className="@container glass-card overflow-hidden rounded-3xl border border-white/15"
           >
             <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-[#27272a] bg-zinc-950">
               <SafeImage
@@ -121,21 +131,21 @@ function ExperienceList() {
                 loading="lazy"
                 className="h-full w-full object-cover"
               />
-              <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/80 px-3 py-1 font-mono-tech text-xs tracking-[0.16em] text-[#00F0FF] backdrop-blur-md">
-                <Award className="h-3.5 w-3.5" />
+              <div className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/80 px-3 py-1 font-mono-tech text-xs tracking-[0.14em] text-[#00F0FF] backdrop-blur-md sm:left-4 sm:top-4">
+                <Award className="h-3.5 w-3.5 shrink-0" />
                 {activeItem.certificateBadge}
               </div>
             </div>
 
-            <div className="p-6">
-              <div className="font-mono-tech text-xs tracking-[0.15em] text-zinc-400">
+            <div className="p-5 sm:p-6">
+              <div className="font-mono-tech text-xs tracking-[0.14em] text-zinc-400">
                 {activeItem.index} // {activeItem.organization.toUpperCase()}
               </div>
               <h4 className="font-sans-tight mt-1 text-xl font-bold text-white">{activeItem.role}</h4>
-              <p className="mt-2.5 text-sm leading-relaxed text-zinc-300">{activeItem.description}</p>
+              <p className="mt-2.5 text-base leading-relaxed text-zinc-300 md:text-sm">{activeItem.description}</p>
 
               <div className="mt-5 border-t border-[#27272a] pt-4">
-                <span className="font-mono-tech block text-[11px] tracking-[0.15em] text-zinc-400">
+                <span className="font-mono-tech block text-xs tracking-[0.14em] text-zinc-400">
                   PRODUCTION STACK
                 </span>
                 <div className="mt-2.5 flex flex-wrap gap-1.5">
@@ -175,7 +185,7 @@ function CaseStudyCard({
       }}
       whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-      className={`glass-card group relative flex flex-col overflow-hidden rounded-3xl border transition-all cursor-pointer ${
+      className={`@container glass-card group relative flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-3xl border transition-all ${
         isSelected
           ? 'border-[#00F0FF] shadow-[0_0_32px_-8px_rgba(0,240,255,0.35)]'
           : 'border-[#27272a] hover:border-white/25'
@@ -190,33 +200,33 @@ function CaseStudyCard({
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <span
-          className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/80 px-3 py-1 font-mono-tech text-xs font-semibold tracking-[0.14em] backdrop-blur-md"
+          className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/80 px-3 py-1 font-mono-tech text-xs font-semibold tracking-[0.12em] backdrop-blur-md sm:left-4 sm:top-4"
           style={{ color: b.accentColor }}
         >
           {b.tag}
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col justify-between p-6">
+      <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
         <div>
           <div className="mb-2.5 flex items-center justify-between font-mono-tech text-xs text-zinc-400">
             <span>{b.date}</span>
             <span>{b.readTime}</span>
           </div>
-          <h3 className="font-sans-tight text-xl font-bold leading-snug tracking-tight text-white group-hover:text-[#00F0FF] transition-colors md:text-2xl">
+          <h3 className="font-sans-tight text-xl font-bold leading-snug tracking-tight text-white transition-colors group-hover:text-[#00F0FF] md:text-2xl">
             {b.title}
           </h3>
-          <p className="mt-2.5 text-sm leading-relaxed text-zinc-300">{b.excerpt}</p>
+          <p className="mt-2.5 text-base leading-relaxed text-zinc-300 md:text-sm">{b.excerpt}</p>
         </div>
 
         <div
-          className="mt-6 flex items-center justify-between border-t border-[#27272a] pt-4 font-mono-tech text-xs font-semibold"
+          className="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-[#27272a] pt-4 font-mono-tech text-xs font-semibold"
           style={{ color: b.accentColor }}
         >
           <span>{b.metrics}</span>
-          <span className="inline-flex items-center gap-1 text-zinc-200 group-hover:text-white">
+          <span className="inline-flex min-h-[36px] items-center gap-1 text-zinc-200 group-hover:text-white">
             {isSelected ? 'Inspecting details' : 'Inspect architecture'}
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <ArrowUpRight className="h-4 w-4 shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </span>
         </div>
       </div>
@@ -247,24 +257,24 @@ function FieldNotesGrid() {
         if (e.key === 'ArrowLeft') handlePrev();
         if (e.key === 'ArrowRight') handleNext();
       }}
-      className="border-t border-[#27272a] py-24 md:py-32"
+      className="border-t border-[#27272a] py-20 md:py-32"
     >
-      <div className="mx-auto max-w-[1400px] px-5 md:px-10">
-        {/* Header + Accessible Carousel/Grid Controls + Progress Dots */}
-        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+      <div className="mx-auto w-full max-w-[1400px] px-4 md:px-8 lg:px-10">
+        {/* Header + Accessible Carousel/Grid Controls + 44x44px Progress Dot Hit Areas */}
+        <div className="mb-10 flex flex-col justify-between gap-6 md:mb-12 md:flex-row md:items-end">
           <div>
-            <span className="font-mono-tech mb-3 block text-xs tracking-[0.25em] text-[#00F0FF]">
+            <span className="font-mono-tech mb-3 block text-xs tracking-[0.2em] text-[#00F0FF] md:tracking-[0.25em]">
               04 — SHIPPED CASE STUDIES &amp; METRICS
             </span>
             <MaskedLines
-              className="font-display text-[clamp(2.2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
+              className="font-display text-[clamp(2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
               lines={[<>Field</>, <span className="text-zinc-500">Notes</span>]}
             />
           </div>
 
-          {/* Keyboard-accessible Arrow Controls & Progress Dots */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2" role="tablist" aria-label="Case study selector">
+          {/* Keyboard & Touch Accessible Controls (44x44px minimum tap targets) */}
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-start">
+            <div className="flex items-center" role="tablist" aria-label="Case study selector">
               {FEATURED_BLOGS.map((b, idx) => {
                 const active = idx === selectedIdx;
                 return (
@@ -278,10 +288,14 @@ function FieldNotesGrid() {
                       playTactileClick('click');
                       setSelectedIdx(idx);
                     }}
-                    className={`h-2.5 rounded-full transition-all ${
-                      active ? 'w-8 bg-[#00F0FF]' : 'w-2.5 bg-zinc-700 hover:bg-zinc-500'
-                    }`}
-                  />
+                    className="flex h-11 w-11 items-center justify-center rounded-full"
+                  >
+                    <span
+                      className={`block h-2.5 rounded-full transition-all ${
+                        active ? 'w-7 bg-[#00F0FF]' : 'w-2.5 bg-zinc-700 hover:bg-zinc-500'
+                      }`}
+                    />
+                  </button>
                 );
               })}
             </div>
@@ -291,7 +305,7 @@ function FieldNotesGrid() {
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous case study"
-                className="glass-pill grid h-10 w-10 place-items-center rounded-full text-zinc-200 transition-colors hover:border-[#00F0FF] hover:text-[#00F0FF]"
+                className="glass-pill grid h-11 w-11 place-items-center rounded-full text-zinc-200 transition-colors hover:border-[#00F0FF] hover:text-[#00F0FF]"
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
@@ -299,7 +313,7 @@ function FieldNotesGrid() {
                 type="button"
                 onClick={handleNext}
                 aria-label="Next case study"
-                className="glass-pill grid h-10 w-10 place-items-center rounded-full text-zinc-200 transition-colors hover:border-[#00F0FF] hover:text-[#00F0FF]"
+                className="glass-pill grid h-11 w-11 place-items-center rounded-full text-zinc-200 transition-colors hover:border-[#00F0FF] hover:text-[#00F0FF]"
               >
                 <ArrowRight className="h-4 w-4" />
               </button>
@@ -307,8 +321,8 @@ function FieldNotesGrid() {
           </div>
         </div>
 
-        {/* Visible 2x2 Grid — No vertical scroll-jacking, all 4 case studies immediately scannable */}
-        <div className="grid gap-6 md:grid-cols-2">
+        {/* Visible 2x2 Grid — grid-cols-1 on mobile, md:grid-cols-2 on tablet/desktop */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {FEATURED_BLOGS.map((b, idx) => (
             <CaseStudyCard
               key={b.id}
@@ -327,11 +341,11 @@ function FieldNotesGrid() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25 }}
-            className="glass-card mt-8 rounded-3xl border border-white/15 p-6 md:p-8"
+            className="glass-card mt-8 overflow-hidden rounded-3xl border border-white/15 p-5 sm:p-6 md:p-8"
           >
-            <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
-              <div className="lg:col-span-7">
-                <div className="flex flex-wrap items-center gap-3 font-mono-tech text-xs">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-center lg:gap-8">
+              <div className="min-w-0 lg:col-span-7">
+                <div className="flex flex-wrap items-center gap-2.5 font-mono-tech text-xs">
                   <span
                     className="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-semibold"
                     style={{ color: activeStudy.accentColor }}
@@ -341,13 +355,13 @@ function FieldNotesGrid() {
                   <span className="text-zinc-300">{activeStudy.metrics}</span>
                 </div>
 
-                <h3 className="font-sans-tight mt-3 text-2xl font-bold text-white md:text-3xl">
+                <h3 className="font-sans-tight mt-3 text-xl font-bold text-white sm:text-2xl md:text-3xl">
                   {activeStudy.title}
                 </h3>
 
                 <ul className="mt-4 space-y-2.5">
                   {activeStudy.content.map((point) => (
-                    <li key={point} className="flex items-start gap-2.5 text-sm leading-relaxed text-zinc-200">
+                    <li key={point} className="flex items-start gap-2.5 text-base leading-relaxed text-zinc-200 md:text-sm">
                       <Sparkles
                         className="mt-1 h-4 w-4 shrink-0"
                         style={{ color: activeStudy.accentColor }}
@@ -358,16 +372,16 @@ function FieldNotesGrid() {
                 </ul>
               </div>
 
-              <div className="lg:col-span-5">
-                <div className="rounded-2xl border border-zinc-800 bg-[#07090c] p-4 font-mono-tech text-xs leading-relaxed text-zinc-200">
-                  <div className="mb-2.5 flex items-center justify-between border-b border-zinc-800 pb-2 text-[11px] text-zinc-400">
+              <div className="min-w-0 lg:col-span-5">
+                <div className="w-full overflow-hidden rounded-2xl border border-zinc-800 bg-[#07090c] p-4 font-mono-tech text-xs leading-relaxed text-zinc-200">
+                  <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-2 text-[11px] text-zinc-400">
                     <span className="inline-flex items-center gap-1.5">
-                      <Code2 className="h-3.5 w-3.5 text-[#00F0FF]" />
+                      <Code2 className="h-3.5 w-3.5 shrink-0 text-[#00F0FF]" />
                       IMPLEMENTATION SPEC
                     </span>
                     <span>TYPESCRIPT / REACT</span>
                   </div>
-                  <pre className="overflow-x-auto text-[11px] leading-relaxed text-[#00F0FF]">
+                  <pre className="max-w-full overflow-x-auto text-xs leading-relaxed text-[#00F0FF] md:text-[11px]">
                     <code>{activeStudy.codeSnippet}</code>
                   </pre>
                 </div>
@@ -383,19 +397,19 @@ function FieldNotesGrid() {
 export default function ExperienceSection() {
   return (
     <>
-      <section id="work" className="py-24 md:py-32">
-        <div className="mx-auto max-w-[1400px] px-5 md:px-10">
-          <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+      <section id="work" className="py-20 md:py-32">
+        <div className="mx-auto w-full max-w-[1400px] px-4 md:px-8 lg:px-10">
+          <div className="mb-10 flex flex-col justify-between gap-4 md:mb-12 md:flex-row md:items-end">
             <div>
-              <span className="font-mono-tech mb-3 block text-xs tracking-[0.25em] text-zinc-400">
+              <span className="font-mono-tech mb-3 block text-xs tracking-[0.2em] text-zinc-400 md:tracking-[0.25em]">
                 03 — WORK HISTORY &amp; SYSTEMS
               </span>
               <MaskedLines
-                className="font-display text-[clamp(2.2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
+                className="font-display text-[clamp(2rem,6vw,5rem)] uppercase leading-[0.9] tracking-[-0.03em]"
                 lines={[<>Selected</>, <span className="text-zinc-500">Experience</span>]}
               />
             </div>
-            <p className="max-w-md text-sm leading-relaxed text-zinc-300">
+            <p className="max-w-md text-base leading-relaxed text-zinc-300 md:text-sm">
               Select or hover any role to inspect its system architecture, production stack, and shipped visual artifacts.
             </p>
           </div>
